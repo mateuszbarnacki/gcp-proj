@@ -1,7 +1,8 @@
 package com.fis.agh.gcp.service;
 
-import com.fis.agh.gcp.TodoItemMapper;
+import com.fis.agh.gcp.mapper.TodoItemMapper;
 import com.fis.agh.gcp.dto.TodoItemDto;
+import com.fis.agh.gcp.model.TodoItem;
 import com.fis.agh.gcp.repository.TodoItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,17 +16,29 @@ public class TodoItemService {
     private final TodoItemMapper mapper;
 
     public TodoItemDto saveItem(TodoItemDto dto) {
-        throw new UnsupportedOperationException();
+        return Optional.of(dto)
+                .map(mapper::mapToEntity)
+                .map(repository::save)
+                .map(mapper::mapToDto)
+                .orElseThrow(() -> new RuntimeException("Could not save given dto"));
     }
 
     public Optional<TodoItemDto> getItem(Long id) {
-        return Optional.of(id)
-                .map(repository::findById)
+        return repository.findById(id)
                 .map(mapper::mapToDto);
     }
 
-    public TodoItemDto updateItem(TodoItemDto dto) {
-        throw new UnsupportedOperationException();
+    public TodoItemDto updateItem(Long id, TodoItemDto dto) {
+        TodoItem item = repository.findById(id).orElseThrow(() -> new RuntimeException("Could not find item with id=" + id));
+
+        item.setTitle(dto.getTitle());
+        item.setContent(dto.getContent());
+        //item.setCompleted(dto.isCompleted());
+
+        return Optional.of(item)
+                .map(repository::save)
+                .map(mapper::mapToDto)
+                .orElseThrow(() -> new RuntimeException("Could not save updated item with id=" + id));
     }
 
     public void deleteItem(Long id) {

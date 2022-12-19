@@ -8,6 +8,7 @@ import java.time.ZonedDateTime;
 @Builder
 @Getter
 public class TodoItemDto {
+    private final String address;
     private final String title;
     private final String content;
     private final ZonedDateTime dueDate;

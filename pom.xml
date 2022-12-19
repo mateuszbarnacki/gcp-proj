@@ -7,31 +7,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.7.4</version>
     </parent>
 
-    <groupId>com.fis.agh</groupId>
+    <groupId>com.fis.agh.gcp</groupId>
     <artifactId>gcp-proj</artifactId>
     <version>1.0</version>
-    <name>gcp-proj</name>
-    <description>Final project on gcp classes</description>
+    <name>gcp</name>
+    <description>Final project</description>
 
     <properties>
         <java.version>17</java.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-gcp-dependencies</artifactId>
-                <version>1.2.8.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -41,8 +28,13 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-gcp-starter-data-datastore</artifactId>
+            <version>1.2.8.RELEASE</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter-pubsub</artifactId>
+            <version>1.2.8.RELEASE</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

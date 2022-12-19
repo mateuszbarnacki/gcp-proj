@@ -32,9 +32,9 @@ public class TodoItemResource {
         return ResponseEntity.ok(service.saveItem(dto));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TodoItemDto> updateTodoItem(@RequestBody TodoItemDto dto) {
-        return ResponseEntity.ok(service.updateItem(dto));
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TodoItemDto> updateTodoItem(@PathVariable Long id, @RequestBody TodoItemDto dto) {
+        return ResponseEntity.ok(service.updateItem(id, dto));
     }
 
     @DeleteMapping("/{id}")

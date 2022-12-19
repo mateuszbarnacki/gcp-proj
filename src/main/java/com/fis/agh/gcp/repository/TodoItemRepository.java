@@ -1,15 +1,11 @@
 package com.fis.agh.gcp.repository;
 
 import com.fis.agh.gcp.model.TodoItem;
+
 import org.springframework.cloud.gcp.data.datastore.repository.DatastoreRepository;
+import org.springframework.stereotype.Repository;
 
-import java.time.ZonedDateTime;
-import java.util.List;
-
+@Repository
 public interface TodoItemRepository extends DatastoreRepository<TodoItem, Long> {
-
-    TodoItem findById(Long id);
-    List<TodoItem> findByDate(ZonedDateTime date);
-    void deleteById(Long id);
 
 }
