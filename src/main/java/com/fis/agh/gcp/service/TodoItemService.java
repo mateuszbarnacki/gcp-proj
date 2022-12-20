@@ -1,6 +1,8 @@
 package com.fis.agh.gcp.service;
 
 import com.fis.agh.gcp.dto.QueryItemDto;
+import com.fis.agh.gcp.exception.InvalidTodoDateException;
+import com.fis.agh.gcp.exception.ItemNotSavedException;
 import com.fis.agh.gcp.mapper.TodoItemMapper;
 import com.fis.agh.gcp.dto.TodoItemDto;
 import com.fis.agh.gcp.model.TodoItem;
@@ -25,7 +27,7 @@ public class TodoItemService {
 
     public TodoItemDto saveItem(TodoItemDto dto) {
         if (dto.getDate().compareTo(Date.from(Instant.now())) < 0) {
-            throw new UnsupportedOperationException("Could not create todo event for the past!");
+            throw new InvalidTodoDateException("Given date is in the past!");
         }
 
         publisher.publish(dto);
@@ -33,7 +35,7 @@ public class TodoItemService {
                 .map(mapper::mapToEntity)
                 .map(repository::save)
                 .map(mapper::mapToDto)
-                .orElseThrow(() -> new RuntimeException("Could not save given dto"));
+                .orElseThrow(() -> new ItemNotSavedException("Could not save given dto"));
     }
 
     public List<TodoItemDto> getUserTodoItems(QueryItemDto queryItem) {
