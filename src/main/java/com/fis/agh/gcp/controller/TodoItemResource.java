@@ -2,7 +2,7 @@ package com.fis.agh.gcp.controller;
 
 import com.fis.agh.gcp.dto.QueryItemDto;
 import com.fis.agh.gcp.dto.TodoItemDto;
-import com.fis.agh.gcp.service.TodoItemService;
+import com.fis.agh.gcp.service.TodoItemRestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/item")
 @RequiredArgsConstructor
 public class TodoItemResource {
-    private final TodoItemService service;
+    private final TodoItemRestService service;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TodoItemDto>> getTodoItem(@RequestBody QueryItemDto queryItemDto) {
