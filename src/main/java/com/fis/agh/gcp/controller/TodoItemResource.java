@@ -2,7 +2,7 @@ package com.fis.agh.gcp.controller;
 
 import com.fis.agh.gcp.dto.QueryItemDto;
 import com.fis.agh.gcp.dto.TodoItemDto;
-import com.fis.agh.gcp.service.TodoItemRestService;
+import com.fis.agh.gcp.service.impl.TodoItemRestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

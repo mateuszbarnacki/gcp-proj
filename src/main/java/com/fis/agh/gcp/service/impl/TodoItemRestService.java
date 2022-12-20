@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.service;
+package com.fis.agh.gcp.service.impl;
 
 import com.fis.agh.gcp.dto.QueryItemDto;
 import com.fis.agh.gcp.exception.InvalidTodoDateException;
@@ -8,6 +8,7 @@ import com.fis.agh.gcp.dto.TodoItemDto;
 import com.fis.agh.gcp.model.TodoItem;
 import com.fis.agh.gcp.pubsub.ConfirmationPublisher;
 import com.fis.agh.gcp.repository.TodoItemRepository;
+import com.fis.agh.gcp.service.api.TodoItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

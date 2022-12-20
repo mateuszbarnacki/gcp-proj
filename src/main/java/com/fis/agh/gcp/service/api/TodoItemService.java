@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.service;
+package com.fis.agh.gcp.service.api;
 
 import com.fis.agh.gcp.dto.QueryItemDto;
 import com.fis.agh.gcp.dto.TodoItemDto;
