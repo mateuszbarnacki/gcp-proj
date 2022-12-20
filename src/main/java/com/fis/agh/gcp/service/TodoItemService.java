@@ -3,6 +3,7 @@ package com.fis.agh.gcp.service;
 import com.fis.agh.gcp.mapper.TodoItemMapper;
 import com.fis.agh.gcp.dto.TodoItemDto;
 import com.fis.agh.gcp.model.TodoItem;
+import com.fis.agh.gcp.pubsub.ConfirmationPublisher;
 import com.fis.agh.gcp.repository.TodoItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,10 @@ import java.util.Optional;
 public class TodoItemService {
     private final TodoItemRepository repository;
     private final TodoItemMapper mapper;
+    private final ConfirmationPublisher publisher;
 
     public TodoItemDto saveItem(TodoItemDto dto) {
+        publisher.publish(dto);
         return Optional.of(dto)
                 .map(mapper::mapToEntity)
                 .map(repository::save)
