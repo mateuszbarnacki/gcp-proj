@@ -8,10 +8,8 @@ import java.util.Date;
 
 @Builder
 @Getter
-public class TodoItemDto {
+public class QueryItemDto {
     private final String address;
-    private final String title;
-    private final String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private final Date date;
     private final boolean completed;

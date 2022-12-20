@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConfirmationPublisher {
     private static final String MESSAGE_CONTENT = "The new todo item %s is created. It's due date is set to %s.";
-    private static final String DATE_FORMAT = "d.MM.yyyy";
+    private static final String DATE_FORMAT = "dd.MM.yyyy";
     private final PubSubTemplate pubSubTemplate;
     @Value("{pubsub.topic}")
     private String topic;
@@ -34,7 +34,7 @@ public class ConfirmationPublisher {
 
     private ByteString buildConfirmationMessage(TodoItemDto todo) {
         DateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
-        String formattedDate = formatter.format(todo.getDueDate());
+        String formattedDate = formatter.format(todo.getDate());
         return ByteString.copyFromUtf8(buildMessageContent(todo, formattedDate));
     }
 
