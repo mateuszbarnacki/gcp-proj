@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.beans.ConstructorProperties;
 import java.util.Date;
 
 @Builder
@@ -15,4 +16,13 @@ public class TodoItemDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private final Date date;
     private final boolean completed;
+
+    @ConstructorProperties({"address", "title", "content", "date", "completed"})
+    public TodoItemDto(String address, String title, String content, Date date, boolean completed) {
+        this.address = address;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.completed = completed;
+    }
 }
