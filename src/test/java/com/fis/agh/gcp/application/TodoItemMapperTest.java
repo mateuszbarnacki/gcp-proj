@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 
 @SpringBootTest
 class TodoItemMapperTest {
+
     @Autowired
     private TodoItemMapper mapper;
 
@@ -32,14 +33,16 @@ class TodoItemMapperTest {
 
     @Test
     void shouldMapEntityToDto() {
+        Date date = new GregorianCalendar(2023, Calendar.JANUARY, 13).getTime();
         TodoItem entity = givenTodoItemEntity();
 
         TodoItemDto dto = mapper.mapToDto(entity);
 
-        AssertionsForClassTypes.assertThat(entity)
+        AssertionsForClassTypes.assertThat(dto)
                 .hasFieldOrPropertyWithValue("title", "Test2")
                 .hasFieldOrPropertyWithValue("content", "Empty")
                 .hasFieldOrPropertyWithValue("address", "test2@o2.pl")
+                .hasFieldOrPropertyWithValue("date", date)
                 .hasFieldOrPropertyWithValue("completed", false);
     }
 
@@ -53,13 +56,14 @@ class TodoItemMapperTest {
     }
 
     private TodoItem givenTodoItemEntity() {
+
         TodoItem item = new TodoItem();
 
         item.setId(1L);
         item.setTitle("Test2");
         item.setContent("Empty");
         item.setAddress("test2@o2.pl");
-        item.setDate(Timestamp.MIN_VALUE);
+        item.setDate(Timestamp.of(new GregorianCalendar(2023, Calendar.JANUARY, 13).getTime()));
         item.setCompleted(false);
 
         return item;
@@ -71,7 +75,7 @@ class TodoItemMapperTest {
                 .content("Dummy content")
                 .address("test@test.pl")
                 .completed(false)
-                .date(new GregorianCalendar(2023, Calendar.APRIL, 1).getTime())
+                .date(new GregorianCalendar(2023, Calendar.JANUARY, 13).getTime())
                 .build();
     }
 }
