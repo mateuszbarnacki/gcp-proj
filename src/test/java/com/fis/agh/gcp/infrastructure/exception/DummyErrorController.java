@@ -1,6 +1,6 @@
 package com.fis.agh.gcp.infrastructure.exception;
 
-import com.fis.agh.gcp.domain.exception.InvalidTodoDateException;
+import com.fis.agh.gcp.domain.exception.InvalidTodoDtoException;
 import com.fis.agh.gcp.domain.exception.ItemNotFoundException;
 import com.fis.agh.gcp.domain.exception.ItemNotSavedException;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/error")
 public class DummyErrorController {
 
-    @GetMapping("/invalid-date")
+    @GetMapping("/invalid-dto")
     public ResponseEntity<RestError> dummyInvalidDateController() {
-        throw new InvalidTodoDateException("Invalid date!");
+        throw new InvalidTodoDtoException("Invalid dto!");
     }
 
     @GetMapping("/item-not-found")

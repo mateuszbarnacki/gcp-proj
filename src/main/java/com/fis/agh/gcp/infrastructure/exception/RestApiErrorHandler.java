@@ -1,6 +1,6 @@
 package com.fis.agh.gcp.infrastructure.exception;
 
-import com.fis.agh.gcp.domain.exception.InvalidTodoDateException;
+import com.fis.agh.gcp.domain.exception.InvalidTodoDtoException;
 import com.fis.agh.gcp.domain.exception.ItemNotFoundException;
 import com.fis.agh.gcp.domain.exception.ItemNotSavedException;
 import com.fis.agh.gcp.domain.exception.TodoItemException;
@@ -14,9 +14,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestApiErrorHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({InvalidTodoDateException.class})
+    @ExceptionHandler({InvalidTodoDtoException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<RestError> handleInvalidTodoDateException(InvalidTodoDateException e) {
+    public ResponseEntity<RestError> handleInvalidTodoDateException(InvalidTodoDtoException e) {
         return new ResponseEntity<>(buildRestError(e), HttpStatus.BAD_REQUEST);
     }
 

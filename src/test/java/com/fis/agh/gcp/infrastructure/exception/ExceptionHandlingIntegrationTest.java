@@ -21,9 +21,9 @@ class ExceptionHandlingIntegrationTest {
 
     @Test
     void shouldReturnBadRequestCausedByInvalidTodoDateException() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/error/invalid-date"))
+        mvc.perform(MockMvcRequestBuilders.get("/error/invalid-dto"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Invalid date!"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Invalid dto!"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("BAD_REQUEST"));
     }
 
