@@ -29,6 +29,8 @@ class TodoItemRestServiceTest {
     private TodoItemRepository repository;
     @Mock
     private TodoItemMapper mapper;
+    @Mock
+    private ItemValidator validator;
     @InjectMocks
     private TodoItemRestService service;
 
@@ -41,6 +43,7 @@ class TodoItemRestServiceTest {
     @Test
     void shouldReturnUserItem() {
         QueryItemDto givenQueryItem = buildQueryItem();
+        Mockito.when(validator.validateQueryItem(any(QueryItemDto.class))).thenReturn(new ValidationResult(List.of()));
         Mockito.when(repository.getUserTodoItems(EMAIL_ADDRESS, false)).thenReturn(List.of(buildTodoItem()));
         Mockito.when(mapper.mapToDto(buildTodoItem())).thenReturn(buildTodoItemDto());
 
@@ -53,6 +56,7 @@ class TodoItemRestServiceTest {
     @Test
     void shouldReturnListOfTodoItemsWhichShouldBeDone() {
         QueryItemDto givenQueryItemWithDate = buildQueryItemWithDate();
+        Mockito.when(validator.validateQueryItem(any(QueryItemDto.class))).thenReturn(new ValidationResult(List.of()));
         Mockito.when(mapper.mapDateToGoogleTimestamp(DATE)).thenReturn(Timestamp.of(DATE));
         Mockito.when(repository.getTodoItemsToBeDone(EMAIL_ADDRESS, Timestamp.of(DATE)))
                 .thenReturn(List.of(buildTodoItem()));
@@ -60,12 +64,13 @@ class TodoItemRestServiceTest {
 
         service.getItemsWhichShouldBeDone(givenQueryItemWithDate);
 
-        Mockito.verify(repository).getTodoItemsToBeDone(anyString(), any());
+        Mockito.verify(repository).getTodoItemsToBeDone(anyString(), any(Timestamp.class));
     }
 
     @Test
     void shouldDeleteAllUserTodoItems() {
         QueryItemDto givenQueryItem = buildQueryItem();
+        Mockito.when(validator.validateQueryItem(any(QueryItemDto.class))).thenReturn(new ValidationResult(List.of()));
         Mockito.when(repository.getAllByAddress(EMAIL_ADDRESS)).thenReturn(List.of(buildTodoItem()));
 
         service.deleteAllUserTodoItems(givenQueryItem);
