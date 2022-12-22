@@ -1,41 +1,41 @@
-const {PubSub} = require('@google-cloud/pubsub');
+const functions = require('@google-cloud/functions-framework')
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
-async function confirmationHandler(projectId = 'smiling-topic-371018',
-                                   topicName = 'confirmation-topic',
-                                   subscriptionName = 'confirmation-sub') {
-    const pubsub = new PubSub();
+functions.cloudEvent('confirmationHandler', cloudEvent => {
+    const base64Message = cloudEvent.data.message.data;
 
-    const [topic] = await pubsub.createTopic(topicName);
-    const [subscription] = await topic.createSubscription(subscriptionName);
-
-    subscription.on('message', message => {
-        const emailData = message.data;
+    if (base64Message) {
+        const emailData = Buffer.from(base64Message, 'base64').toString().split(';');
+        console.log('Sending email message');
         sendConfirmationEmail(emailData);
-    });
-
-    subscription.on('error', error => {
-        console.error('Received error: ', error);
-    });
-}
+    } else {
+        console.error('Error while receiving data from PubSub');
+    }
+});
 
 function sendConfirmationEmail(emailData) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: '',
-            pass: ''
+            type: 'OAuth2',
+            user: process.env.MAIL_USERNAME,
+            pass: process.env.MAIL_PASSWORD,
+            clientId: process.env.OAUTH_CLIENTID,
+            clientSecret: process.env.OAUTH_CLIENT_SECRET,
+            refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+            accessToken: process.env.OAUTH_ACRESS_TOKEN
         }
     });
 
     const emailOptions = {
-        from: 'gcp.proj.email@gmail.com',
-        to: emailData.address,
-        subject: 'Creation of new ToDo item: ' + emailData.title,
-        text: emailData.content
+        from: process.env.MAIL_USERNAME,
+        to: emailData[0],
+        subject: 'Creation of new ToDo item: ' + emailData[1],
+        text: emailData[2]
     };
 
-    transporter.sendMail(emailOptions, (error, info) => {
+    transporter.sendMail(emailOptions, function(error, data) {
         if (error) {
             console.error('Could not send email: ' + error);
         } else {
@@ -43,5 +43,3 @@ function sendConfirmationEmail(emailData) {
         }
     });
 }
-
-module.exports.confirmirmationHandler = confirmationHandler;

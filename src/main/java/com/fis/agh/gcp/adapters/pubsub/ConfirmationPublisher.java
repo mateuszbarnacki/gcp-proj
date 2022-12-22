@@ -15,7 +15,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class ConfirmationPublisher {
-    private static final String MESSAGE_CONTENT = "The new todo item %s is created. It's due date is set to %s.";
+    private static final String MESSAGE_CONTENT = "The new todo item \"%s\" is created. It's due date is set to %s.";
     private static final String DATE_FORMAT = "dd.MM.yyyy";
     private final PubSubTemplate pubSubTemplate;
     @Value("{pubsub.topic}")
@@ -39,7 +39,7 @@ public class ConfirmationPublisher {
     }
 
     private String buildMessageContent(TodoItemDto todo, String formattedDate) {
-        return todo.getAddress() + ";" + todo.getTitle() + ";" +
+        return todo.getAddress() + ";" + todo.getTitle() + " event created;" +
                 String.format(MESSAGE_CONTENT, todo.getTitle(), formattedDate);
     }
 
