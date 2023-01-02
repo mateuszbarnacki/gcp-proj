@@ -12,7 +12,7 @@ public class TodoItemMapper {
     public TodoItemDto mapToDto(TodoItem item) {
         Timestamp timestamp = item.getDate();
         return TodoItemDto.builder()
-                .address(item.getAddress())
+                .address(item.getEmailAddress())
                 .title(item.getTitle())
                 .content(item.getContent())
                 .date(timestamp.toDate())
@@ -24,7 +24,7 @@ public class TodoItemMapper {
         TodoItem item = new TodoItem();
         Timestamp timestamp = mapDateToGoogleTimestamp(dto.getDate());
 
-        item.setAddress(dto.getAddress());
+        item.setEmailAddress(dto.getAddress());
         item.setTitle(dto.getTitle());
         item.setContent(dto.getContent());
         item.setDate(timestamp);

@@ -27,7 +27,7 @@ class TodoItemMapperTest {
         AssertionsForClassTypes.assertThat(entity)
                 .hasFieldOrPropertyWithValue("title", "Test1")
                 .hasFieldOrPropertyWithValue("content", "Dummy content")
-                .hasFieldOrPropertyWithValue("address", "test@test.pl")
+                .hasFieldOrPropertyWithValue("emailAddress", "test@test.pl")
                 .hasFieldOrPropertyWithValue("completed", false);
     }
 
@@ -62,7 +62,7 @@ class TodoItemMapperTest {
         item.setId(1L);
         item.setTitle("Test2");
         item.setContent("Empty");
-        item.setAddress("test2@o2.pl");
+        item.setEmailAddress("test2@o2.pl");
         item.setDate(Timestamp.of(new GregorianCalendar(2023, Calendar.JANUARY, 13).getTime()));
         item.setCompleted(false);
 

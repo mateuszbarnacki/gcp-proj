@@ -35,8 +35,8 @@ public class TodoItemRepositoryImpl implements TodoItemRepository {
     }
 
     @Override
-    public List<TodoItem> getAllByAddress(String emailAddress) {
-        return jpaRepository.getAllByAddress(emailAddress);
+    public List<TodoItem> getAllByEmailAddress(String emailAddress) {
+        return jpaRepository.getAllByEmailAddress(emailAddress);
     }
 
     @Override

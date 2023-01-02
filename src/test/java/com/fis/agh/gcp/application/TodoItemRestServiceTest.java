@@ -71,7 +71,7 @@ class TodoItemRestServiceTest {
     void shouldDeleteAllUserTodoItems() {
         QueryItemDto givenQueryItem = buildQueryItem();
         Mockito.when(validator.validateQueryItem(any(QueryItemDto.class))).thenReturn(new ValidationResult(List.of()));
-        Mockito.when(repository.getAllByAddress(EMAIL_ADDRESS)).thenReturn(List.of(buildTodoItem()));
+        Mockito.when(repository.getAllByEmailAddress(EMAIL_ADDRESS)).thenReturn(List.of(buildTodoItem()));
 
         service.deleteAllUserTodoItems(givenQueryItem);
 
@@ -84,7 +84,7 @@ class TodoItemRestServiceTest {
         item.setId(1L);
         item.setTitle("Test");
         item.setContent("Dummy content");
-        item.setAddress(EMAIL_ADDRESS);
+        item.setEmailAddress(EMAIL_ADDRESS);
         item.setDate(Timestamp.of(DATE));
         item.setCompleted(false);
 

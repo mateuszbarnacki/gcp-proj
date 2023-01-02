@@ -16,7 +16,7 @@ public interface TodoItemRepository {
 
     List<TodoItem> getTodoItemsToBeDone(String emailAddress, Timestamp date);
 
-    List<TodoItem> getAllByAddress(String emailAddress);
+    List<TodoItem> getAllByEmailAddress(String emailAddress);
 
     void deleteAll(List<TodoItem> items);
 }

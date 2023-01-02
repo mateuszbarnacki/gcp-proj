@@ -27,7 +27,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 
-@SpringBootTest
+@SpringBootTest(classes = TodoItemResourceImpl.class)
 @AutoConfigureMockMvc(addFilters = false)
 class TodoItemResourceIntegrationTest {
     private MockMvc mvc;

@@ -2,22 +2,21 @@ package com.fis.agh.gcp.domain;
 
 import com.google.cloud.Timestamp;
 import lombok.Data;
-import org.springframework.cloud.gcp.data.datastore.core.mapping.Entity;
-import org.springframework.cloud.gcp.data.datastore.core.mapping.Field;
-import org.springframework.cloud.gcp.data.datastore.core.mapping.Unindexed;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity(name = "todo_items")
 @Data
 public class TodoItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Field(name = "email_address")
-    private String address;
+    private String emailAddress;
     private String title;
-    @Unindexed
     private String content;
     private Timestamp date;
-    @Unindexed
     private boolean completed;
 }

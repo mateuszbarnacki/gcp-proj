@@ -83,7 +83,7 @@ public class TodoItemRestService implements TodoItemService {
             logger.error(validationResult.getMessages());
         }
 
-        List<TodoItem> items = repository.getAllByAddress(queryItem.getEmailAddress());
+        List<TodoItem> items = repository.getAllByEmailAddress(queryItem.getEmailAddress());
         deleteListOfTodoItems(items);
     }
 
