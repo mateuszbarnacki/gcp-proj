@@ -7,7 +7,7 @@ terraform {
 }
 
 locals {
-    project = var.PROJECT_ID
+    project = var.project_id
 }
 
 provider "google" {
@@ -50,6 +50,10 @@ resource "google_cloudfunctions2_function" "function" {
         max_instance_count = 5
         available_memory   = "256M"
 
+        environment_variables {
+            MAIL_USERNAME_TEST = var.mail_username_test
+        }
+
         secret_environment_variables {
             key        = "MAIL_USERNAME"
             project_id = local.project
@@ -61,13 +65,6 @@ resource "google_cloudfunctions2_function" "function" {
             key        = "MAIL_PASSWORD"
             project_id = local.project
             secret     = google_secret_manager_secret.mail-password-secret.secret_id
-            version    = "latest"
-        }
-
-        secret_environment_variables {
-            key        = "MAIL_USERNAME_TEST"
-            project_id = local.project
-            secret     = google_secret_manager_secret.mail-username-test-secret.secret_id
             version    = "latest"
         }
 
@@ -110,7 +107,6 @@ resource "google_cloudfunctions2_function" "function" {
     depends_on = [
         google_secret_manager_secret_version.mail-username-secret-ver,
         google_secret_manager_secret_version.mail-password-secret-ver,
-        google_secret_manager_secret_version.mail-username-test-secret-ver,
         google_secret_manager_secret_version.oauth-client_id-secret-ver,
         google_secret_manager_secret_version.oauth-client_secret-secret-ver,
         google_secret_manager_secret_version.oauth-refresh-token-secret-ver,
@@ -132,18 +128,6 @@ resource "google_secret_manager_secret" "mail-username-secret" {
 
 resource "google_secret_manager_secret" "mail-password-secret" {
     secret_id = "mail-password"
-
-    replication {
-        user_managed {
-            replicas {
-                location = "europe-west3"
-            }
-        }
-    }
-}
-
-resource "google_secret_manager_secret" "mail-username-test-secret" {
-    secret_id = "mail-username-test"
 
     replication {
         user_managed {
@@ -204,46 +188,36 @@ resource "google_secret_manager_secret" "oauth-access-token-secret" {
 
 resource "google_secret_manager_secret_version" "mail-username-secret-ver" {
     secret      = google_secret_manager_secret.mail-username-secret.name
-    secret_data = var.MAIL_USERNAME
+    secret_data = var.mail_username
     enabled     = true
 }
 
 resource "google_secret_manager_secret_version" "mail-password-secret-ver" {
     secret      = google_secret_manager_secret.mail-password-secret.name
-    secret_data = var.MAIL_PASSWORD
-    enabled     = true
-}
-
-resource "google_secret_manager_secret_version" "mail-username-test-secret-ver" {
-    secret      = google_secret_manager_secret.mail-username-test-secret.name
-    secret_data = var.MAIL_USERNAME_TEST
+    secret_data = var.mail_password
     enabled     = true
 }
 
 resource "google_secret_manager_secret_version" "oauth-client_id-secret-ver" {
     secret      = google_secret_manager_secret.oauth-client_id-secret.name
-    secret_data = var.OAUTH_CLIENTID
+    secret_data = var.oauth_clientId
     enabled     = true
 }
 
 resource "google_secret_manager_secret_version" "oauth-client_secret-secret-ver" {
     secret      = google_secret_manager_secret.oauth-client_secret-secret.name
-    secret_data = var.OAUTH_CLIENT_SECRET
+    secret_data = var.oauth_client_secret
     enabled     = true
 }
 
 resource "google_secret_manager_secret_version" "oauth-refresh-token-secret-ver" {
     secret      = google_secret_manager_secret.oauth-refresh-token-secret.name
-    secret_data = var.OAUTH_REFRESH_TOKEN
+    secret_data = var.oauth_refresh_token
     enabled     = true
 }
 
 resource "google_secret_manager_secret_version" "oauth-access-token-secret-ver" {
     secret      = google_secret_manager_secret.oauth-access-token-secret.name
-    secret_data = var.OAUTH_ACCESS_TOKEN
+    secret_data = var.oauth_access_token
     enabled     = true
-}
-
-output "function_uri" {
-    value = google_cloudfunctions2_function.function.service_config[0].uri
 }
