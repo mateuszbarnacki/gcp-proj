@@ -17,6 +17,13 @@ provider "google" {
     zone    = "europe-west3-b"
 }
 
+resource "google_project_service" "pubsub" {
+    service            = "pubsub.googleapis.com"
+    disable_on_destroy = false
+}
+
+// PubSub
+
 resource "google_pubsub_topic" "pubsub-topic" {
     name = "confirmation-topic"
     message_storage_policy {
@@ -26,6 +33,13 @@ resource "google_pubsub_topic" "pubsub-topic" {
     }
     message_retention_duration = "86400s"
 }
+
+resource "google_project_service" "function" {
+    service            = "cloudfunctions.googleapis.com"
+    disable_on_destroy = false
+}
+
+// Cloud Function Gen 2
 
 resource "google_cloudfunctions2_function" "function" {
     name        = "confirmation-handler"
@@ -112,6 +126,13 @@ resource "google_cloudfunctions2_function" "function" {
         google_secret_manager_secret_version.oauth-refresh-token-secret-ver,
         google_secret_manager_secret_version.oauth-access-token-secret-ver
     ]
+}
+
+// Secret Manager
+
+resource "google_project_service" "secret_manager" {
+    service            = "secretmanager.googleapis.com"
+    disable_on_destroy = false
 }
 
 resource "google_secret_manager_secret" "mail-username-secret" {
@@ -220,4 +241,57 @@ resource "google_secret_manager_secret_version" "oauth-access-token-secret-ver" 
     secret      = google_secret_manager_secret.oauth-access-token-secret.name
     secret_data = var.oauth_access_token
     enabled     = true
+}
+
+// Cloud Run
+
+resource "google_project_service" "run" {
+    service            = "run.googleapis.com"
+    disable_on_destroy = false
+}
+
+data "google_container_registry_image" "project-app" {
+    name = var.image_name
+}
+
+resource "google_cloud_run_service" "server" {
+    name     = "gcp-proj-app"
+    location = "europe-west3"
+
+    template {
+        spec {
+            containers {
+                image = data.google_container_registry_image.project-app.image_url
+            }
+        }
+    }
+
+    metadata {
+        annotations = {
+            "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.db_instance.connection_name
+        }
+    }
+
+    traffic {
+        percent         = 100
+        latest_revision = true
+    }
+}
+
+// Cloud SQL
+
+resource "google_sql_database_instance" "db_instance" {
+    name             = "gcp-proj-instance"
+    region           = "europe-west3"
+    database_version = "POSTGRES_14"
+
+    settings {
+        tier = "db-f1-micro"
+
+        location_preference {
+            zone = "europe-west3"
+        }
+    }
+
+    deletion_protection = "false"
 }
