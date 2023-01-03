@@ -13,22 +13,39 @@ locals {
 provider "google" {
     version = "4.47.0"
     project = local.project
-    region  = "europe-west3"
+    region  = var.region
     zone    = "europe-west3-b"
 }
+
+// Cloud source repo
+
+resource "google_project_service" "repo" {
+    service            = "sourcerepo.googleapis.com"
+    disable_on_destroy = false
+}
+
+resource "google_sourcerepo_repository" "cloud-run-repo" {
+    name       = var.cloud_run_repo_name
+    depends_on = [google_project_service.repo]
+}
+
+resource "google_sourcerepo_repository" "cloud-function-repo" {
+    name       = var.cloud_function_repo_name
+    depends_on = [google_project_service.repo]
+}
+
+// PubSub
 
 resource "google_project_service" "pubsub" {
     service            = "pubsub.googleapis.com"
     disable_on_destroy = false
 }
 
-// PubSub
-
 resource "google_pubsub_topic" "pubsub-topic" {
     name = "confirmation-topic"
     message_storage_policy {
         allowed_persistence_regions = [
-            "europe-west3",
+            var.region,
         ]
     }
     message_retention_duration = "86400s"
@@ -43,7 +60,7 @@ resource "google_project_service" "function" {
 
 resource "google_cloudfunctions2_function" "function" {
     name        = "confirmation-handler"
-    location    = "europe-west3"
+    location    = var.region
     description = "This function sends email when user create new todo item"
 
     build_config {
@@ -52,9 +69,9 @@ resource "google_cloudfunctions2_function" "function" {
         source {
             repo_source {
                 branch_name = "main"
-                dir         = "cloud-functions/confirmationHandler"
+                dir         = "cloud-functions/confirmationHandler" // move to cloud-functions dir
                 project_id  = local.project
-                repo_name   = "mateuszbarnacki/gcp-proj"
+                repo_name   = var.cloud_function_repo_name
             }
         }
     }
@@ -112,7 +129,7 @@ resource "google_cloudfunctions2_function" "function" {
     }
 
     event_trigger {
-        trigger_region = "europe-west3"
+        trigger_region = var.region
         event_type     = "google.cloud.pubsub.topic.v2.messagePublished"
         pubsub_topic   = google_pubsub_topic.pubsub-topic.id
         retry_policy   = "RETRY_POLICY_RETRY"
@@ -141,7 +158,7 @@ resource "google_secret_manager_secret" "mail-username-secret" {
     replication {
         user_managed {
             replicas {
-                location = "europe-west3"
+                location = var.region
             }
         }
     }
@@ -153,7 +170,7 @@ resource "google_secret_manager_secret" "mail-password-secret" {
     replication {
         user_managed {
             replicas {
-                location = "europe-west3"
+                location = var.region
             }
         }
     }
@@ -165,7 +182,7 @@ resource "google_secret_manager_secret" "oauth-client_id-secret" {
     replication {
         user_managed {
             replicas {
-                location = "europe-west3"
+                location = var.region
             }
         }
     }
@@ -177,7 +194,7 @@ resource "google_secret_manager_secret" "oauth-client_secret-secret" {
     replication {
         user_managed {
             replicas {
-                location = "europe-west3"
+                location = var.region
             }
         }
     }
@@ -189,7 +206,7 @@ resource "google_secret_manager_secret" "oauth-refresh-token-secret" {
     replication {
         user_managed {
             replicas {
-                location = "europe-west3"
+                location = var.region
             }
         }
     }
@@ -201,7 +218,7 @@ resource "google_secret_manager_secret" "oauth-access-token-secret" {
     replication {
         user_managed {
             replicas {
-                location = "europe-west3"
+                location = var.region
             }
         }
     }
@@ -256,7 +273,7 @@ data "google_container_registry_image" "project-app" {
 
 resource "google_cloud_run_service" "server" {
     name     = "gcp-proj-app"
-    location = "europe-west3"
+    location = var.region
 
     template {
         spec {
@@ -278,20 +295,56 @@ resource "google_cloud_run_service" "server" {
     }
 }
 
+data "google_iam_policy" "all_users_policy" {
+    binding {
+        role    = "roles/run.invoker"
+        members = ["allUsers"]
+    }
+}
+
+resource "google_cloud_run_service_iam_policy" "all_users_iam_policy" {
+    location    = google_cloud_run_service.server.location
+    service     = google_cloud_run_service.server.name
+    policy_data = data.google_iam_policy.all_users_policy.policy_data
+}
+
 // Cloud SQL
 
 resource "google_sql_database_instance" "db_instance" {
     name             = "gcp-proj-instance"
-    region           = "europe-west3"
+    region           = var.region
     database_version = "POSTGRES_14"
 
     settings {
         tier = "db-f1-micro"
 
         location_preference {
-            zone = "europe-west3"
+            zone = "europe-west3-b"
         }
     }
 
     deletion_protection = "false"
+}
+
+// Cloud Build
+
+resource "google_project_service" "build" {
+    service            = "cloudbuild.googleapis.com"
+    disable_on_destroy = false
+}
+
+resource "google_project_service" "registry" {
+    service            = "containerregistry.googleapis.com"
+    disable_on_destroy = false
+}
+
+resource "google_cloudbuild_trigger" "cloud_build_trigger" {
+    name = var.cloud_run_repo_name
+
+    trigger_template {
+        repo_name   = var.cloud_run_repo_name
+        branch_name = var.branch_name
+    }
+    filename   = "cloudbuild.yaml"
+    depends_on = [google_project_service.build]
 }

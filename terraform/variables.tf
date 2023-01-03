@@ -3,6 +3,30 @@ variable "project_id" {
   description = "GCP project identifier"
 }
 
+variable "region" {
+  type        = string
+  description = "GCP project default region"
+}
+
+variable "cloud_run_repo_name" {
+  type        = string
+  description = "Name of Cloud Run source repository"
+}
+
+variable "cloud_function_repo_name" {
+  type        = string
+  description = "Name of Cloud Function source repository"
+}
+
+variable "image_name" {
+  type        = string
+  description = "Name of the Cloud Run image"
+}
+
+variable "branch_name" {
+  type = string
+}
+
 variable "mail_username" {
   type        = string
   description = "Project email address"
