@@ -29,11 +29,6 @@ resource "google_sourcerepo_repository" "cloud-run-repo" {
     depends_on = [google_project_service.repo]
 }
 
-resource "google_sourcerepo_repository" "cloud-function-repo" {
-    name       = var.cloud_function_repo_name
-    depends_on = [google_project_service.repo]
-}
-
 // PubSub
 
 resource "google_project_service" "pubsub" {
@@ -51,12 +46,23 @@ resource "google_pubsub_topic" "pubsub-topic" {
     message_retention_duration = "86400s"
 }
 
+// Cloud Function Gen 2
+
 resource "google_project_service" "function" {
     service            = "cloudfunctions.googleapis.com"
     disable_on_destroy = false
 }
 
-// Cloud Function Gen 2
+resource "google_storage_bucket" "bucket" {
+    name     = var.bucket_name
+    location = "EU"
+}
+
+resource "google_storage_bucket_object" "bucket_object" {
+    name   = var.bucket_object_name
+    bucket = google_storage_bucket.bucket.name
+    source = var.cloud_function_source
+}
 
 resource "google_cloudfunctions2_function" "function" {
     name        = var.cloud_function_name
@@ -67,11 +73,9 @@ resource "google_cloudfunctions2_function" "function" {
         runtime    = "nodejs16"
         entryPoint = var.cloud_function_entry_point
         source {
-            repo_source {
-                branch_name = var.branch_name
-                dir         = "cloud-functions/confirmationHandler" // move to cloud-functions dir
-                project_id  = local.project
-                repo_name   = var.cloud_function_repo_name
+            storage_source {
+                bucket = google_storage_bucket.bucket.name
+                object = google_storage_bucket_object.bucket_object.name
             }
         }
     }

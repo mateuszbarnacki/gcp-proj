@@ -18,11 +18,6 @@ variable "cloud_run_repo_name" {
   description = "Name of Cloud Run source repository"
 }
 
-variable "cloud_function_repo_name" {
-  type        = string
-  description = "Name of Cloud Function source repository"
-}
-
 variable "image_name" {
   type        = string
   description = "Name of the Cloud Run image"
@@ -34,6 +29,20 @@ variable "branch_name" {
 
 variable "pubsub_topic_name" {
   type = string
+}
+
+variable "bucket_name" {
+  type        = string
+  description = "Unique cloud bucket name"
+}
+
+variable "bucket_object_name" {
+  type = string
+}
+
+variable "cloud_function_source" {
+  type        = string
+  description = "Name of ZIP file which is stored in cloud bucket"
 }
 
 variable "cloud_function_name" {
