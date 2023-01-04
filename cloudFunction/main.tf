@@ -13,8 +13,13 @@ resource "google_pubsub_topic" "pubsub-topic" {
   message_retention_duration = "86400s"
 }
 
-resource "google_project_service" "function" {
-  service            = "cloudfunctions.googleapis.com"
+resource "google_project_service" "storage-json" {
+  service            = "storage-api.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "storage" {
+  service            = "storage.googleapis.com"
   disable_on_destroy = false
 }
 
@@ -27,6 +32,11 @@ resource "google_storage_bucket_object" "bucket_object" {
   name   = var.bucket_object_name
   bucket = google_storage_bucket.bucket.name
   source = var.cloud_function_source
+}
+
+resource "google_project_service" "function" {
+  service            = "cloudfunctions.googleapis.com"
+  disable_on_destroy = false
 }
 
 resource "google_cloudfunctions2_function" "function" {
