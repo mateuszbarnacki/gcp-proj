@@ -8,6 +8,11 @@ variable "region" {
   description = "GCP project default region"
 }
 
+variable "zone" {
+  type        = string
+  description = "GCP project default zone"
+}
+
 variable "cloud_run_repo_name" {
   type        = string
   description = "Name of Cloud Run source repository"
@@ -25,6 +30,35 @@ variable "image_name" {
 
 variable "branch_name" {
   type = string
+}
+
+variable "pubsub_topic_name" {
+  type = string
+}
+
+variable "cloud_function_name" {
+  type        = string
+  description = "Cloud function name in GCP"
+}
+
+variable "cloud_function_entry_point" {
+  type        = string
+  description = "Cloud function name in code"
+}
+
+variable "cloud_run_name" {
+  type        = string
+  description = "Name of cloud run instance"
+}
+
+variable "cloud_sql_db_instance_name" {
+  type        = string
+  description = "Name of cloud sql db instance"
+}
+
+variable "cloud_build_filename" {
+  type        = string
+  description = "Name of cloud build configuration file"
 }
 
 variable "mail_username" {

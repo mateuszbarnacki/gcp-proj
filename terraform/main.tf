@@ -14,7 +14,7 @@ provider "google" {
     version = "4.47.0"
     project = local.project
     region  = var.region
-    zone    = "europe-west3-b"
+    zone    = var.zone
 }
 
 // Cloud source repo
@@ -42,7 +42,7 @@ resource "google_project_service" "pubsub" {
 }
 
 resource "google_pubsub_topic" "pubsub-topic" {
-    name = "confirmation-topic"
+    name = var.pubsub_topic_name
     message_storage_policy {
         allowed_persistence_regions = [
             var.region,
@@ -59,16 +59,16 @@ resource "google_project_service" "function" {
 // Cloud Function Gen 2
 
 resource "google_cloudfunctions2_function" "function" {
-    name        = "confirmation-handler"
+    name        = var.cloud_function_name
     location    = var.region
     description = "This function sends email when user create new todo item"
 
     build_config {
         runtime    = "nodejs16"
-        entryPoint = "confirmationHandler"
+        entryPoint = var.cloud_function_entry_point
         source {
             repo_source {
-                branch_name = "main"
+                branch_name = var.branch_name
                 dir         = "cloud-functions/confirmationHandler" // move to cloud-functions dir
                 project_id  = local.project
                 repo_name   = var.cloud_function_repo_name
@@ -272,7 +272,7 @@ data "google_container_registry_image" "project-app" {
 }
 
 resource "google_cloud_run_service" "server" {
-    name     = "gcp-proj-app"
+    name     = var.cloud_run_name
     location = var.region
 
     template {
@@ -311,7 +311,7 @@ resource "google_cloud_run_service_iam_policy" "all_users_iam_policy" {
 // Cloud SQL
 
 resource "google_sql_database_instance" "db_instance" {
-    name             = "gcp-proj-instance"
+    name             = var.cloud_sql_db_instance_name
     region           = var.region
     database_version = "POSTGRES_14"
 
@@ -319,7 +319,7 @@ resource "google_sql_database_instance" "db_instance" {
         tier = "db-f1-micro"
 
         location_preference {
-            zone = "europe-west3-b"
+            zone = var.zone
         }
     }
 
@@ -345,6 +345,6 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
         repo_name   = var.cloud_run_repo_name
         branch_name = var.branch_name
     }
-    filename   = "cloudbuild.yaml"
+    filename   = var.cloud_build_filename
     depends_on = [google_project_service.build]
 }
