@@ -46,7 +46,7 @@ resource "google_cloudfunctions2_function" "function" {
 
   build_config {
     runtime    = "nodejs16"
-    entryPoint = var.cloud_function_entry_point
+    entry_point = var.cloud_function_entry_point
     source {
       storage_source {
         bucket = google_storage_bucket.bucket.name
@@ -60,7 +60,7 @@ resource "google_cloudfunctions2_function" "function" {
     max_instance_count = 5
     available_memory   = "256M"
 
-    environment_variables {
+    environment_variables = {
       MAIL_USERNAME_TEST = var.mail_username_test
     }
 
