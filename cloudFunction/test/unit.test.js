@@ -1,5 +1,5 @@
 const {getFunction} = require('@google-cloud/functions-framework/testing');
-require('..');
+require('../index');
 
 describe('functions_cloudevent_pubsub', () => {
     const assert = require('assert');
