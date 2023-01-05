@@ -19,12 +19,6 @@ resource "google_cloud_run_service" "server" {
     }
   }
 
-  metadata {
-    annotations = {
-      "run.googleapis.com/cloudsql-instances" = google_sql_database_instance.db_instance.connection_name
-    }
-  }
-
   traffic {
     percent         = 100
     latest_revision = true
