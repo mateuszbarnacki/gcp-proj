@@ -127,7 +127,7 @@ resource "google_cloudfunctions2_function" "function" {
 
 data "archive_file" "init" {
   type       = "zip"
-  source_dir = "../cloudFunctions"
+  source_dir = "${path.module}/../cloudFunctions"
   excludes = ["${path.module}/main.tf",
     "${path.module}/output.tf",
     "${path.module}/variables.tf"]
