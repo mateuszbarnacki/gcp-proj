@@ -38,4 +38,5 @@ module "cloud_function" {
     oauth_refresh_token        = var.oauth_refresh_token
     oauth_access_token         = var.oauth_access_token
     mail_username_test         = var.mail_username_test
+    depends_on = [module.cloud_run]
 }
