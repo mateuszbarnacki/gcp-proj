@@ -1,9 +1,16 @@
 terraform {
   required_providers {
+    archive = {
+      source = "hashicorp/archive"
+    }
     google = {
       source = "hashicorp/google"
     }
   }
+}
+
+provider "archive" {
+  version = "2.2.0"
 }
 
 provider "google" {

@@ -24,8 +24,9 @@ resource "google_project_service" "storage" {
 }
 
 resource "google_storage_bucket" "bucket" {
-  name     = var.bucket_name
-  location = "EU"
+  name          = var.bucket_name
+  location      = "EU"
+  force_destroy = true
 }
 
 resource "google_storage_bucket_object" "bucket_object" {
@@ -45,7 +46,7 @@ resource "google_cloudfunctions2_function" "function" {
   description = "This function sends email when user create new todo item"
 
   build_config {
-    runtime    = "nodejs16"
+    runtime     = "nodejs16"
     entry_point = var.cloud_function_entry_point
     source {
       storage_source {
@@ -124,7 +125,14 @@ resource "google_cloudfunctions2_function" "function" {
   ]
 }
 
-// Secret Manager
+data "archive_file" "init" {
+  type       = "zip"
+  source_dir = "../cloudFunctions"
+  excludes = ["${path.module}/main.tf",
+    "${path.module}/output.tf",
+    "${path.module}/variables.tf"]
+  output_path = var.cloud_function_source
+}
 
 resource "google_project_service" "secret_manager" {
   service            = "secretmanager.googleapis.com"
