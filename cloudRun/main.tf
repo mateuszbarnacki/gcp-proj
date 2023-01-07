@@ -21,6 +21,12 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     step {
       name = "gcr.io/cloud-builders/gcloud"
       entrypoint = "/bin/bash"
+      args = ["-c", "cd"]
+    }
+
+    step {
+      name = "gcr.io/cloud-builders/gcloud"
+      entrypoint = "/bin/bash"
       args = ["-c", "pwd"]
     }
 
