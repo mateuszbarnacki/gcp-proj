@@ -1,5 +1,6 @@
 module "source_repo" {
     source              = "./sourceRepo"
+    project_id          = var.project_id
     cloud_run_repo_name = var.cloud_run_repo_name
 }
 
