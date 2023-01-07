@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -48,7 +49,7 @@ public class TodoItemRestService implements TodoItemService {
         return repository.getUserTodoItems(queryItem.getEmailAddress(), queryItem.isCompleted())
                 .stream()
                 .map(mapper::mapToDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public List<TodoItemDto> queryTodoItems(@NotNull QueryItemDto queryItem) {
@@ -61,7 +62,7 @@ public class TodoItemRestService implements TodoItemService {
                         mapper.mapDateToGoogleTimestamp(queryItem.getDate()))
                 .stream()
                 .map(mapper::mapToDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public List<TodoItemDto> getItemsWhichShouldBeDone(@NotNull QueryItemDto queryItem) {
@@ -74,7 +75,7 @@ public class TodoItemRestService implements TodoItemService {
                         mapper.mapDateToGoogleTimestamp(queryItem.getDate()))
                 .stream()
                 .map(mapper::mapToDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public void deleteAllUserTodoItems(@NotNull QueryItemDto queryItem) {
