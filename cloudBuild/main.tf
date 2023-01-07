@@ -13,9 +13,16 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
   trigger_template {
     branch_name = var.branch_name
-    repo_name   = var.cloud_run_repo_name
+    repo_name = var.cloud_run_repo_name
   }
 
-  filename   = var.cloud_build_filename
+  filename = var.cloud_build_filename
   depends_on = [google_project_service.build]
+}
+
+resource "null_resource" "empty_commit" {
+  depends_on = [google_cloudbuild_trigger.cloud_build_trigger]
+  provisioner "local-exec" {
+    command = "git commit --allow-empty -m 'Trigger build' && git push origin master"
+  }
 }
