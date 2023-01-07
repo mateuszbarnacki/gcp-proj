@@ -3,20 +3,14 @@ module "source_repo" {
     project_id          = var.project_id
     cloud_run_repo_name = var.cloud_run_repo_name
 }
-
-module "cloud_build" {
-    source               = "./cloudBuild"
-    depends_on           = [module.source_repo]
-    project_id           = var.project_id
-    cloud_run_repo_name  = var.cloud_run_repo_name
-    cloud_run_repo_owner = var.cloud_run_repo_owner
-    branch_name          = var.branch_name
-    cloud_build_filename = var.cloud_build_filename
-}
-
 module "cloud_run" {
     source                     = "./cloudRun"
-    depends_on                 = [module.cloud_build]
+    depends_on                 = [module.source_repo]
+    project_id                 = var.project_id
+    cloud_run_repo_name        = var.cloud_run_repo_name
+    cloud_run_repo_owner       = var.cloud_run_repo_owner
+    branch_name                = var.branch_name
+    cloud_build_filename       = var.cloud_build_filename
     region                     = var.region
     zone                       = var.zone
     image_name                 = var.image_name
