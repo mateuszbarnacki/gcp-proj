@@ -8,6 +8,7 @@ data "google_container_registry_image" "project-app" {
 }
 
 resource "google_cloud_run_service" "server" {
+  depends_on = [google_project_service.run]
   name     = var.cloud_run_name
   location = var.region
 
