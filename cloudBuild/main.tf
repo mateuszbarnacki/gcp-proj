@@ -11,12 +11,9 @@ resource "google_project_service" "registry" {
 resource "google_cloudbuild_trigger" "cloud_build_trigger" {
   name = var.cloud_run_repo_name
 
-  github {
-    owner = var.cloud_run_repo_owner
-    name  = var.cloud_run_repo_name
-    push {
-      branch = var.branch_name
-    }
+  trigger_template {
+    repo_name = var.cloud_run_repo_name
+    branch_name = var.branch_name
   }
 
   build {
@@ -42,6 +39,6 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 resource "null_resource" "empty_commit" {
   depends_on = [google_cloudbuild_trigger.cloud_build_trigger]
   provisioner "local-exec" {
-    command = "cd && cd gcp-proj && git commit --allow-empty -m 'Trigger build' && git push"
+    command = "cd && cd gcp-proj && git remote set-url https://source.developers.google.com/p/${var.project_id}/r/${var.cloud_run_repo_name} && git commit --allow-empty -m 'Trigger build' && git push"
   }
 }
