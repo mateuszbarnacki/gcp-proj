@@ -19,8 +19,20 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
   build {
     step {
+      name = "gcr.io/cloud-builders/gcloud"
+      entrypoint = "/bin/bash"
+      args = ['-c', 'pwd']
+    }
+
+    step {
       name = "gcr.io/cloud-builders/docker"
       args = ["build", "-t", "gcr.io/${var.project_id}/todolist-app", "."]
+    }
+
+    step {
+      name = "gcr.io/cloud-builders/gcloud"
+      entrypoint = "/bin/bash"
+      args = ['-c', 'echo AFTER_FIRST_STEP']
     }
 
     step {
@@ -30,7 +42,20 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
     step {
       name = "gcr.io/cloud-builders/gcloud"
-      args = ["run", "deploy", "app", "--image", "gcr.io/${var.project_id}/todolist-app", "--region", "europe-west3", "--platform", "managed", "--allow-unauthenticated"]
+      entrypoint = "/bin/bash"
+      args = ['-c', 'echo AFTER_SECOND_STEP']
+    }
+
+
+    step {
+      name = "gcr.io/cloud-builders/gcloud"
+      args = ["run", "deploy", "gcp-proj-app", "--image", "gcr.io/${var.project_id}/todolist-app", "--region", "europe-west3", "--platform", "managed", "--allow-unauthenticated"]
+    }
+
+    step {
+      name = "gcr.io/cloud-builders/gcloud"
+      entrypoint = "/bin/bash"
+      args = ['-c', 'echo AFTER_THIRD_STEP']
     }
   }
 }
