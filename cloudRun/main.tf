@@ -19,24 +19,6 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
   build {
     step {
-      name = "gcr.io/cloud-builders/gcloud"
-      entrypoint = "/bin/bash"
-      args = ["-c", "cd cloudRun"]
-    }
-
-    step {
-      name = "gcr.io/cloud-builders/gcloud"
-      entrypoint = "/bin/bash"
-      args = ["-c", "pwd"]
-    }
-
-    step {
-      name = "gcr.io/cloud-builders/gcloud"
-      entrypoint = "/bin/bash"
-      args = ["-c", "ls"]
-    }
-
-    step {
       name = "gcr.io/cloud-builders/mvn"
       args = ["clean", "install"]
     }
@@ -47,32 +29,13 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     }
 
     step {
-      name = "gcr.io/cloud-builders/gcloud"
-      entrypoint = "/bin/bash"
-      args = ["-c", "echo AFTER_FIRST_STEP"]
-    }
-
-    step {
       name   = "gcr.io/cloud-builders/docker"
       args = ["push", "gcr.io/${var.project_id}/todolist-app"]
     }
 
     step {
       name = "gcr.io/cloud-builders/gcloud"
-      entrypoint = "/bin/bash"
-      args = ["-c", "echo AFTER_SECOND_STEP"]
-    }
-
-
-    step {
-      name = "gcr.io/cloud-builders/gcloud"
       args = ["run", "deploy", "gcp-proj-app", "--image", "gcr.io/${var.project_id}/todolist-app", "--region", "europe-west3", "--platform", "managed", "--allow-unauthenticated"]
-    }
-
-    step {
-      name = "gcr.io/cloud-builders/gcloud"
-      entrypoint = "/bin/bash"
-      args = ["-c", "echo AFTER_THIRD_STEP"]
     }
   }
 }
