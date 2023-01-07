@@ -21,7 +21,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     step {
       name = "gcr.io/cloud-builders/gcloud"
       entrypoint = "/bin/bash"
-      args = ['-c', 'pwd']
+      args = ["-c", "pwd"]
     }
 
     step {
@@ -32,7 +32,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     step {
       name = "gcr.io/cloud-builders/gcloud"
       entrypoint = "/bin/bash"
-      args = ['-c', 'echo AFTER_FIRST_STEP']
+      args = ["-c", "echo AFTER_FIRST_STEP"]
     }
 
     step {
@@ -43,7 +43,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     step {
       name = "gcr.io/cloud-builders/gcloud"
       entrypoint = "/bin/bash"
-      args = ['-c', 'echo AFTER_SECOND_STEP']
+      args = ["-c", "echo AFTER_SECOND_STEP"]
     }
 
 
@@ -55,7 +55,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     step {
       name = "gcr.io/cloud-builders/gcloud"
       entrypoint = "/bin/bash"
-      args = ['-c', 'echo AFTER_THIRD_STEP']
+      args = ["-c", "echo AFTER_THIRD_STEP"]
     }
   }
 }
