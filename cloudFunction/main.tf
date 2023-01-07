@@ -110,7 +110,7 @@ resource "google_cloudfunctions2_function" "function" {
 
   event_trigger {
     trigger_region = var.region
-    event_type     = "google.cloud.pubsub.topic.v2.messagePublished"
+    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
     pubsub_topic   = google_pubsub_topic.pubsub-topic.id
     retry_policy   = "RETRY_POLICY_RETRY"
   }
