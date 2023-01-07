@@ -6,7 +6,9 @@ module "source_repo" {
 module "cloud_build" {
     source               = "./cloudBuild"
     depends_on           = [module.source_repo]
+    project_id           = var.project_id
     cloud_run_repo_name  = var.cloud_run_repo_name
+    cloud_run_repo_owner = var.cloud_run_repo_owner
     branch_name          = var.branch_name
     cloud_build_filename = var.cloud_build_filename
 }

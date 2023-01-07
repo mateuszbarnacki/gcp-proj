@@ -13,6 +13,11 @@ variable "zone" {
   description = "GCP project default zone"
 }
 
+variable "cloud_run_repo_owner" {
+  type        = string
+  description = "Owner of github repository"
+}
+
 variable "cloud_run_repo_name" {
   type        = string
   description = "Name of Cloud Run source repository"
