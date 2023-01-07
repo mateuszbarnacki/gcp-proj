@@ -23,6 +23,6 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 resource "null_resource" "empty_commit" {
   depends_on = [google_cloudbuild_trigger.cloud_build_trigger]
   provisioner "local-exec" {
-    command = "git commit --allow-empty -m 'Trigger build' && git push origin master"
+    command = "cd /sourceRepo && git commit --allow-empty -m 'Trigger build' && git push origin master"
   }
 }

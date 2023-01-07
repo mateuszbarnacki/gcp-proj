@@ -1,5 +1,11 @@
+module "source_repo" {
+    source              = "./sourceRepo"
+    cloud_run_repo_name = var.cloud_run_repo_name
+}
+
 module "cloud_build" {
     source               = "./cloudBuild"
+    depends_on           = [module.source_repo]
     cloud_run_repo_name  = var.cloud_run_repo_name
     branch_name          = var.branch_name
     cloud_build_filename = var.cloud_build_filename
@@ -17,6 +23,7 @@ module "cloud_run" {
 
 module "cloud_function" {
     source                     = "./cloudFunction"
+    depends_on                 = [module.cloud_run]
     project_id                 = var.project_id
     region                     = var.region
     pubsub_topic_name          = var.pubsub_topic_name
@@ -32,5 +39,4 @@ module "cloud_function" {
     oauth_refresh_token        = var.oauth_refresh_token
     oauth_access_token         = var.oauth_access_token
     mail_username_test         = var.mail_username_test
-    depends_on = [module.cloud_run]
 }
