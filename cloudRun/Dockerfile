@@ -1,9 +1,9 @@
-FROM openjdk:17-alpine
+FROM openjdk:11
 
 ENV APP_FILE gcp-proj.jar
 ENV APP_HOME /usr/apps
 
-EXPOSE 9009
+EXPOSE 8080
 COPY target/$APP_FILE $APP_HOME/
 WORKDIR $APP_HOME
 ENTRYPOINT ["sh", "-c"]
