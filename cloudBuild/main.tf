@@ -9,6 +9,7 @@ resource "google_project_service" "registry" {
 }
 
 resource "google_cloudbuild_trigger" "cloud_build_trigger" {
+  depends_on = [google_project_service.build]
   name = var.cloud_run_repo_name
 
   trigger_template {
@@ -32,8 +33,6 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
       args = ["run", "deploy", "app", "--image", "gcr.io/${var.project_id}/todolist-app", "--region", "europe-west3", "--platform", "managed", "--allow-unauthenticated"]
     }
   }
-
-  depends_on = [google_project_service.build]
 }
 
 resource "null_resource" "empty_commit" {
