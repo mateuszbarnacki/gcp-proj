@@ -21,7 +21,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     step {
       name = "gcr.io/cloud-builders/gcloud"
       entrypoint = "/bin/bash"
-      args = ["-c", "cd ~"]
+      args = ["-c", "cd cloudRun"]
     }
 
     step {
@@ -34,6 +34,11 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
       name = "gcr.io/cloud-builders/gcloud"
       entrypoint = "/bin/bash"
       args = ["-c", "ls"]
+    }
+
+    step {
+      name = "gcr.io/cloud-builders/mvn"
+      args = ["clean", "install"]
     }
 
     step {
