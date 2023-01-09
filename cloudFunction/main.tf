@@ -45,6 +45,11 @@ resource "google_project_service" "eventarc" {
   disable_on_destroy = false
 }
 
+resource "google_project_service" "artifact_registry" {
+  service            = "artifactregistry.googleapis.com"
+  disable_on_destroy = false
+}
+
 resource "google_cloudfunctions2_function" "function" {
   name        = var.cloud_function_name
   location    = var.region
