@@ -40,4 +40,6 @@ module "cloud_function" {
     oauth_refresh_token        = var.oauth_refresh_token
     oauth_access_token         = var.oauth_access_token
     mail_username_test         = var.mail_username_test
+    account_id                 = var.account_id
+    display_name               = var.display_name
 }
