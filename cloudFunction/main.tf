@@ -144,6 +144,22 @@ data "archive_file" "init" {
   output_path = var.cloud_function_source
 }
 
+resource "google_project_iam_policy" "function_iam_policy" {
+  project     = var.project_id
+  policy_data = data.google_iam_policy.iam.policy_data
+}
+
+data "google_iam_policy" "iam" {
+  binding {
+    role = "roles/secretmanager.secretAccessor"
+    members = ["allUsers"]
+  }
+  binding {
+    role = "roles/viewer"
+    members = ["allUsers"]
+  }
+}
+
 resource "google_project_service" "secret_manager" {
   service            = "secretmanager.googleapis.com"
   disable_on_destroy = false
