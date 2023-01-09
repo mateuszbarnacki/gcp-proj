@@ -152,11 +152,11 @@ resource "google_project_iam_policy" "function_iam_policy" {
 data "google_iam_policy" "iam" {
   binding {
     role = "roles/secretmanager.secretAccessor"
-    members = ["allUsers"]
+    members = ["serviceAccount:project_accessing_secret@XYZ.iam.gserviceaccount.com",]
   }
   binding {
     role = "roles/viewer"
-    members = ["allUsers"]
+    members = ["serviceAccount:project_accessing_secret@XYZ.iam.gserviceaccount.com",]
   }
 }
 
