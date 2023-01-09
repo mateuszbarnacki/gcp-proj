@@ -15,9 +15,6 @@ module "cloud_build" {
 module "cloud_run" {
     source                     = "./cloudRun"
     depends_on                 = [module.cloud_function]
-    project_id                 = var.project_id
-    cloud_run_repo_name        = var.cloud_run_repo_name
-    branch_name                = var.branch_name
     region                     = var.region
     zone                       = var.zone
     image_name                 = var.image_name
