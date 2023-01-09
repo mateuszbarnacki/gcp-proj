@@ -149,13 +149,15 @@ resource "google_service_account" "cloud_function_service_account" {
   display_name = var.display_name
 }
 
-resource "google_iam_policy_binding" "secret_accessor_binding" {
+resource "google_project_iam_binding" "secret_accessor_binding" {
+  project = var.project_id
   role    = "roles/secretmanager.secretAccessor"
   members = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
-resource "google_iam_policy_binding" "viewer_binding" {
+resource "google_project_iam_binding" "viewer_binding" {
+  project = var.project_id
   role    = "roles/viewer"
   members = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
   depends_on = [google_service_account.cloud_function_service_account]
