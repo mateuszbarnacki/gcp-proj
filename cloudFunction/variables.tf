@@ -36,6 +36,16 @@ variable "cloud_function_entry_point" {
   description = "Cloud function name in code"
 }
 
+variable "account_id" {
+  type        = string
+  description = "Cloud function service account identifier"
+}
+
+variable "display_name" {
+  type        = string
+  description = "Cloud function service account display name"
+}
+
 variable "mail_username" {
   type        = string
   description = "Project email address"

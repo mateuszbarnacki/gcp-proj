@@ -144,20 +144,21 @@ data "archive_file" "init" {
   output_path = var.cloud_function_source
 }
 
-resource "google_project_iam_policy" "function_iam_policy" {
-  project     = var.project_id
-  policy_data = data.google_iam_policy.iam.policy_data
+resource "google_service_account" "cloud_function_service_account" {
+  account_id = var.account_id
+  display_name = var.display_name
 }
 
-data "google_iam_policy" "iam" {
-  binding {
-    role = "roles/secretmanager.secretAccessor"
-    members = ["serviceAccount:project_accessing_secret@${var.project_id}.iam.gserviceaccount.com",]
-  }
-  binding {
-    role = "roles/viewer"
-    members = ["serviceAccount:project_accessing_secret@${var.project_id}.iam.gserviceaccount.com",]
-  }
+resource "google_iam_policy_binding" "secret_accessor_binding" {
+  role    = "roles/secretmanager.secretAccessor"
+  members = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
+  depends_on = [google_service_account.cloud_function_service_account]
+}
+
+resource "google_iam_policy_binding" "viewer_binding" {
+  role    = "roles/viewer"
+  members = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
+  depends_on = [google_service_account.cloud_function_service_account]
 }
 
 resource "google_project_service" "secret_manager" {

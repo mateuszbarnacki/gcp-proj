@@ -60,6 +60,16 @@ variable "cloud_function_entry_point" {
   description = "Cloud function name in code"
 }
 
+variable "account_id" {
+  type        = string
+  description = "Cloud function service account identifier"
+}
+
+variable "display_name" {
+  type        = string
+  description = "Cloud function service account display name"
+}
+
 variable "cloud_run_name" {
   type        = string
   description = "Name of cloud run instance"
