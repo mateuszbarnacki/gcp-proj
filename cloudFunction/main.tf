@@ -126,6 +126,14 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   depends_on = [
+    google_project_service.function,
+    google_project_service.pubsub,
+    google_project_service.storage,
+    google_project_service.storage-json,
+    google_project_service.secret_manager,
+    google_project_service.artifact_registry,
+    google_project_service.eventarc,
+    google_service_account.cloud_function_service_account,
     google_secret_manager_secret_version.mail-username-secret-ver,
     google_secret_manager_secret_version.mail-password-secret-ver,
     google_secret_manager_secret_version.oauth-client_id-secret-ver,
