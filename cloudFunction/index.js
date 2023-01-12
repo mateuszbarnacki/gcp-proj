@@ -1,7 +1,14 @@
 const functions = require('@google-cloud/functions-framework')
 const nodemailer = require('nodemailer');
+const express = require('express');
 const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 require('dotenv').config();
+
+const PORT = 8080;
+const HOST = '0.0.0.0';
+
+const app = express();
+app.listen(PORT, HOST);
 
 const SECRET = {
     MAIL_USERNAME: 'mail-username',
@@ -27,6 +34,11 @@ const accessSecret = async keyName => {
 
     return version.payload.data.toString('utf8');
 };
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log('Hello world listening on port', port);
+});
 
 functions.cloudEvent('confirmationHandler', cloudEvent => {
     const base64Message = cloudEvent.data.message.data;

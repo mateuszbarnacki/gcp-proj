@@ -70,7 +70,7 @@ resource "google_cloudfunctions2_function" "function" {
     min_instance_count    = 1
     max_instance_count    = 5
     available_memory      = "256M"
-    timeout_seconds       = 60
+    timeout_seconds       = 120
 
     environment_variables = {
       APP_PROJECT_ID = "${var.project_id}"
@@ -139,6 +139,7 @@ resource "google_cloudfunctions2_function" "function" {
     google_project_service.artifact_registry,
     google_project_service.eventarc,
     google_service_account.cloud_function_service_account,
+    google_pubsub_topic.pubsub-topic,
     google_secret_manager_secret_version.mail-username-secret-ver,
     google_secret_manager_secret_version.mail-password-secret-ver,
     google_secret_manager_secret_version.oauth-client_id-secret-ver,
@@ -169,9 +170,9 @@ resource "google_project_iam_binding" "secret_accessor_binding" {
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
-resource "google_project_iam_binding" "run_admin_binding" {
+resource "google_project_iam_binding" "viewer_binding" {
   project    = var.project_id
-  role       = "roles/run.admin"
+  role       = "roles/viewer"
   members    = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
   depends_on = [google_service_account.cloud_function_service_account]
 }
