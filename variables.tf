@@ -13,11 +13,6 @@ variable "zone" {
   description = "GCP project default zone"
 }
 
-variable "cloud_run_repo_owner" {
-  type        = string
-  description = "Owner of github repository"
-}
-
 variable "cloud_run_repo_name" {
   type        = string
   description = "Name of Cloud Run source repository"
@@ -78,11 +73,6 @@ variable "cloud_run_name" {
 variable "cloud_sql_db_instance_name" {
   type        = string
   description = "Name of cloud sql db instance"
-}
-
-variable "cloud_build_filename" {
-  type        = string
-  description = "Name of cloud build configuration file"
 }
 
 variable "mail_username" {
