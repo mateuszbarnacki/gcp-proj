@@ -1,17 +1,6 @@
-const functions = require('@google-cloud/functions-framework')
 const nodemailer = require('nodemailer');
-const express = require('express');
 const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 require('dotenv').config();
-
-const port = process.env.PORT || 8080;
-const app = express();
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
-app.listen(port, () => {
-    console.log('Hello world listening on port', port);
-});
 
 const SECRET = {
     MAIL_USERNAME: 'mail-username',
@@ -38,8 +27,8 @@ const accessSecret = async keyName => {
     return version.payload.data.toString();
 };
 
-functions.cloudEvent('confirmationHandler', cloudEvent => {
-    const base64Message = cloudEvent.data.message.data;
+exports.confirmationHandler = pubsubMessage => {
+    const base64Message = pubsubMessage.data;
 
     if (base64Message) {
         const emailData = Buffer.from(base64Message, 'base64').toString().split(';');
@@ -48,7 +37,7 @@ functions.cloudEvent('confirmationHandler', cloudEvent => {
     } else {
         console.error('Error while receiving data from PubSub');
     }
-});
+};
 
 function sendConfirmationEmail(emailData) {
     const user = accessSecret(SECRET.MAIL_USERNAME);
@@ -86,5 +75,3 @@ function sendConfirmationEmail(emailData) {
         }
     });
 }
-
-module.exports = app;
