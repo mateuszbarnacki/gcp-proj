@@ -52,7 +52,6 @@ resource "google_project_service" "artifact_registry" {
 
 resource "google_cloudfunctions_function" "function" {
   name                  = var.cloud_function_name
-  location              = var.region
   runtime               = "nodejs16"
   entry_point           = var.cloud_function_entry_point
   description           = "This function sends email when user create new todo item"
@@ -113,9 +112,6 @@ resource "google_cloudfunctions_function" "function" {
 
   event_trigger {
     event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    failure_policy = {
-      retry = true
-    }
     resource       = "projects/${var.project_id}/topics/${var.pubsub_topic_name}"
   }
 
@@ -166,32 +162,13 @@ resource "google_project_iam_binding" "viewer_binding" {
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
-data "google_iam_policy" "admin" {
-  binding {
-    role = "roles/cloudfunctions.admin"
-    members = [
-      "serviceAccount:${google_service_account.cloud_function_service_account.email}",
-    ]
-  }
-}
-
-resource "google_cloudfunctions2_function_iam_policy" "policy" {
+resource "google_cloudfunctions_function_iam_member" "invoker" {
   project        = google_cloudfunctions_function.function.project
-  location       = google_cloudfunctions_function.function.location
-  cloud_function = google_cloudfunctions_function.function.name
-  policy_data    = data.google_iam_policy.admin.policy_data
-}
-
-
-resource "google_cloudfunctions2_function_iam_member" "invoker" {
-  project        = google_cloudfunctions_function.function.project
+  region         = google_cloudfunctions_function.function.region
   cloud_function = google_cloudfunctions_function.function.name
 
   role   = "roles/cloudfunctions.invoker"
   member = "allUsers"
-  depends_on = [
-    google_cloudfunctions2_function_iam_policy.policy
-  ]
 }
 
 resource "google_project_service" "secret_manager" {

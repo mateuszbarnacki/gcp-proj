@@ -1,3 +1,3 @@
 output "function_uri" {
-  value = google_cloudfunctions2_function.function.service_config[0].uri
+  value = google_cloudfunctions_function.function.source_repository.0.deployed_url
 }
