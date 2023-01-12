@@ -13,7 +13,6 @@ app.listen(port, () => {
     console.log('Hello world listening on port', port);
 });
 
-
 const SECRET = {
     MAIL_USERNAME: 'mail-username',
     MAIL_PASSWORD: 'mail-password',
@@ -87,3 +86,5 @@ function sendConfirmationEmail(emailData) {
         }
     });
 }
+
+module.exports = app;
