@@ -164,9 +164,9 @@ resource "google_project_iam_binding" "secret_accessor_binding" {
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
-resource "google_project_iam_binding" "viewer_binding" {
+resource "google_project_iam_binding" "editor_binding" {
   project = var.project_id
-  role    = "roles/viewer"
+  role    = "roles/editor"
   members = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
   depends_on = [google_service_account.cloud_function_service_account]
 }
