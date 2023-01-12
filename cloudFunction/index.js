@@ -91,3 +91,5 @@ function sendConfirmationEmail(emailData) {
         }
     });
 }
+
+module.exports = app;
