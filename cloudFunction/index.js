@@ -4,14 +4,15 @@ const express = require('express');
 const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
 require('dotenv').config();
 
-const PORT = 8080;
-const HOST = '0.0.0.0';
-
+const port = process.env.PORT || 8080;
 const app = express();
 app.get('/', (req, res) => {
     res.send('Hello World');
 });
-app.listen(PORT, HOST);
+app.listen(port, () => {
+    console.log('Hello world listening on port', port);
+});
+
 
 const SECRET = {
     MAIL_USERNAME: 'mail-username',
@@ -37,11 +38,6 @@ const accessSecret = async keyName => {
 
     return version.payload.data.toString('utf8');
 };
-
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-    console.log('Hello world listening on port', port);
-});
 
 functions.cloudEvent('confirmationHandler', cloudEvent => {
     const base64Message = cloudEvent.data.message.data;
@@ -91,5 +87,3 @@ function sendConfirmationEmail(emailData) {
         }
     });
 }
-
-module.exports = app;
