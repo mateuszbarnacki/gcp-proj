@@ -36,7 +36,7 @@ const accessSecret = async keyName => {
         name,
     });
 
-    return version.payload.data.toString('utf8');
+    return version.payload.data.toString();
 };
 
 functions.cloudEvent('confirmationHandler', cloudEvent => {
