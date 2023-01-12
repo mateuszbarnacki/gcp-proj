@@ -73,8 +73,8 @@ resource "google_cloudfunctions2_function" "function" {
     timeout_seconds       = 60
 
     environment_variables = {
-      PROJECT_ID = var.project_id
-      MAIL_USERNAME_TEST = var.mail_username_test
+      APP_PROJECT_ID = "${var.project_id}"
+      APP_MAIL_USERNAME_TEST = "${var.mail_username_test}"
     }
 
     secret_environment_variables {
