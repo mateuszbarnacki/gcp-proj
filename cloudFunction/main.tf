@@ -67,9 +67,10 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   service_config {
-    min_instance_count = 1
-    max_instance_count = 5
-    available_memory   = "256M"
+    min_instance_count    = 1
+    max_instance_count    = 5
+    available_memory      = "256M"
+    timeout_seconds       = 60
 
     environment_variables = {
       MAIL_USERNAME_TEST = var.mail_username_test
@@ -116,6 +117,9 @@ resource "google_cloudfunctions2_function" "function" {
       secret     = google_secret_manager_secret.oauth-access-token-secret.secret_id
       version    = "latest"
     }
+
+    all_traffic_on_latest_revision = true
+    service_account_email = google_service_account.cloud_function_service_account.email
   }
 
   event_trigger {
