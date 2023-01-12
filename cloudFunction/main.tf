@@ -144,30 +144,30 @@ resource "google_cloudfunctions2_function" "function" {
 }
 
 data "archive_file" "init" {
-  type       = "zip"
-  source_dir = "${path.module}/../cloudFunction"
-  excludes = ["${path.module}/main.tf",
+  type        = "zip"
+  source_dir  = "${path.module}/../cloudFunction"
+  excludes    = ["${path.module}/main.tf",
     "${path.module}/output.tf",
     "${path.module}/variables.tf"]
   output_path = var.cloud_function_source
 }
 
 resource "google_service_account" "cloud_function_service_account" {
-  account_id = var.account_id
+  account_id   = var.account_id
   display_name = var.display_name
 }
 
 resource "google_project_iam_binding" "secret_accessor_binding" {
-  project = var.project_id
-  role    = "roles/secretmanager.secretAccessor"
-  members = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
+  project    = var.project_id
+  role       = "roles/secretmanager.secretAccessor"
+  members    = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
-resource "google_project_iam_binding" "editor_binding" {
-  project = var.project_id
-  role    = "roles/editor"
-  members = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
+resource "google_project_iam_binding" "run_admin_binding" {
+  project    = var.project_id
+  role       = "roles/run.admin"
+  members    = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
