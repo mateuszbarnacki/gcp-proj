@@ -7,7 +7,7 @@ describe('function_cloudevent_pubsub', () => {
     it('should process a PubSub event', async () => {
         const pubsubEventData = {data: {message: {}}};
 
-        const testEmail = process.env.MAIL_USERNAME_TEST;
+        const testEmail = process.env.APP_MAIL_USERNAME_TEST;
         const testTitle = 'Umyć okna event created;';
         const testContent = 'The new todo item \"Umyć okna\" is created. It\'s due date is set to 22.12.2022.';
         const testMessage = testEmail + testTitle + testContent;

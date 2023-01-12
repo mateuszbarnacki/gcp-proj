@@ -13,7 +13,7 @@ const SECRET = {
 }
 
 const buildSecretName = keyName => {
-    const project = process.env.PROJECT_ID;
+    const project = process.env.APP_PROJECT_ID;
     return `projects/${project}/secrets/${keyName}/versions/latest`;
 };
 
