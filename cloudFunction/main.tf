@@ -50,69 +50,84 @@ resource "google_project_service" "artifact_registry" {
   disable_on_destroy = false
 }
 
-resource "google_cloudfunctions_function" "function" {
-  name                  = var.cloud_function_name
-  runtime               = "nodejs16"
-  entry_point           = var.cloud_function_entry_point
-  description           = "This function sends email when user create new todo item"
-  source_archive_bucket = google_storage_bucket.bucket.name
-  source_archive_object = google_storage_bucket_object.bucket_object.name
-  min_instances         = 1
-  max_instances         = 5
-  available_memory_mb   = 256
-  timeout               = 120
-  service_account_email = google_service_account.cloud_function_service_account.email
+resource "google_cloudfunctions2_function" "function" {
+  name        = var.cloud_function_name
+  location    = var.region
+  description = "This function sends email when user create new todo item"
 
-  environment_variables = {
-    APP_PROJECT_ID = "${var.project_id}"
-    APP_MAIL_USERNAME_TEST = "${var.mail_username_test}"
+  build_config {
+    runtime     = "nodejs16"
+    entry_point = var.cloud_function_entry_point
+    source {
+      storage_source {
+        bucket = google_storage_bucket.bucket.name
+        object = google_storage_bucket_object.bucket_object.name
+      }
+    }
   }
 
-  secret_environment_variables {
-    key        = "MAIL_USERNAME"
-    project_id = var.project_id
-    secret     = google_secret_manager_secret.mail-username-secret.secret_id
-    version    = "latest"
-  }
+  service_config {
+    min_instance_count    = 1
+    max_instance_count    = 5
+    available_memory      = "256M"
+    timeout_seconds       = 120
 
-  secret_environment_variables {
-    key        = "MAIL_PASSWORD"
-    project_id = var.project_id
-    secret     = google_secret_manager_secret.mail-password-secret.secret_id
-    version    = "latest"
-  }
+    environment_variables = {
+      APP_PROJECT_ID = "${var.project_id}"
+      APP_MAIL_USERNAME_TEST = "${var.mail_username_test}"
+    }
 
-  secret_environment_variables {
-    key        = "OAUTH_CLIENTID"
-    project_id = var.project_id
-    secret     = google_secret_manager_secret.oauth-client_id-secret.secret_id
-    version    = "latest"
-  }
+    secret_environment_variables {
+      key        = "MAIL_USERNAME"
+      project_id = var.project_id
+      secret     = google_secret_manager_secret.mail-username-secret.secret_id
+      version    = "latest"
+    }
 
-  secret_environment_variables {
-    key        = "OAUTH_CLIENT_SECRET"
-    project_id = var.project_id
-    secret     = google_secret_manager_secret.oauth-client_secret-secret.secret_id
-    version    = "latest"
-  }
+    secret_environment_variables {
+      key        = "MAIL_PASSWORD"
+      project_id = var.project_id
+      secret     = google_secret_manager_secret.mail-password-secret.secret_id
+      version    = "latest"
+    }
 
-  secret_environment_variables {
-    key        = "OAUTH_REFRESH_TOKEN"
-    project_id = var.project_id
-    secret     = google_secret_manager_secret.oauth-refresh-token-secret.secret_id
-    version    = "latest"
-  }
+    secret_environment_variables {
+      key        = "OAUTH_CLIENTID"
+      project_id = var.project_id
+      secret     = google_secret_manager_secret.oauth-client_id-secret.secret_id
+      version    = "latest"
+    }
 
-  secret_environment_variables {
-    key        = "OAUTH_ACCESS_TOKEN"
-    project_id = var.project_id
-    secret     = google_secret_manager_secret.oauth-access-token-secret.secret_id
-    version    = "latest"
+    secret_environment_variables {
+      key        = "OAUTH_CLIENT_SECRET"
+      project_id = var.project_id
+      secret     = google_secret_manager_secret.oauth-client_secret-secret.secret_id
+      version    = "latest"
+    }
+
+    secret_environment_variables {
+      key        = "OAUTH_REFRESH_TOKEN"
+      project_id = var.project_id
+      secret     = google_secret_manager_secret.oauth-refresh-token-secret.secret_id
+      version    = "latest"
+    }
+
+    secret_environment_variables {
+      key        = "OAUTH_ACCESS_TOKEN"
+      project_id = var.project_id
+      secret     = google_secret_manager_secret.oauth-access-token-secret.secret_id
+      version    = "latest"
+    }
+
+    all_traffic_on_latest_revision = true
+    service_account_email = google_service_account.cloud_function_service_account.email
   }
 
   event_trigger {
-    event_type     = "providers/cloud.pubsub/eventTypes/topic.publish"
-    resource       = var.pubsub_topic_name
+    trigger_region = var.region
+    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic   = "projects/${var.project_id}/topics/${var.pubsub_topic_name}"
+    retry_policy   = "RETRY_POLICY_RETRY"
   }
 
   depends_on = [
@@ -162,13 +177,32 @@ resource "google_project_iam_binding" "viewer_binding" {
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
-resource "google_cloudfunctions_function_iam_member" "invoker" {
-  project        = google_cloudfunctions_function.function.project
-  region         = google_cloudfunctions_function.function.region
-  cloud_function = google_cloudfunctions_function.function.name
+data "google_iam_policy" "admin" {
+  binding {
+    role = "roles/cloudfunctions.admin"
+    members = [
+      "serviceAccount:${google_service_account.cloud_function_service_account.email}",
+    ]
+  }
+}
+
+resource "google_cloudfunctions2_function_iam_policy" "policy" {
+  project        = google_cloudfunctions2_function.function.project
+  location       = google_cloudfunctions2_function.function.location
+  cloud_function = google_cloudfunctions2_function.function.name
+  policy_data    = data.google_iam_policy.admin.policy_data
+}
+
+
+resource "google_cloudfunctions2_function_iam_member" "invoker" {
+  project        = google_cloudfunctions2_function.function.project
+  cloud_function = google_cloudfunctions2_function.function.name
 
   role   = "roles/cloudfunctions.invoker"
   member = "allUsers"
+  depends_on = [
+    google_cloudfunctions2_function_iam_policy.policy
+  ]
 }
 
 resource "google_project_service" "secret_manager" {
