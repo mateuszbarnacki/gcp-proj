@@ -10,10 +10,10 @@ resource "google_project_service" "registry" {
 
 resource "google_cloudbuild_trigger" "cloud_build_trigger" {
   depends_on = [google_project_service.build]
-  name = var.cloud_run_repo_name
+  name       = var.cloud_run_repo_name
 
   trigger_template {
-    repo_name = var.cloud_run_repo_name
+    repo_name   = var.cloud_run_repo_name
     branch_name = var.branch_name
   }
 
@@ -29,7 +29,7 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
     }
 
     step {
-      name   = "gcr.io/cloud-builders/docker"
+      name = "gcr.io/cloud-builders/docker"
       args = ["push", "gcr.io/${var.project_id}/todolist-app"]
     }
 

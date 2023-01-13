@@ -67,13 +67,13 @@ resource "google_cloudfunctions2_function" "function" {
   }
 
   service_config {
-    min_instance_count    = 1
-    max_instance_count    = 5
-    available_memory      = "256M"
-    timeout_seconds       = 120
+    min_instance_count = 1
+    max_instance_count = 5
+    available_memory   = "256M"
+    timeout_seconds    = 120
 
     environment_variables = {
-      APP_PROJECT_ID = "${var.project_id}"
+      APP_PROJECT_ID         = "${var.project_id}"
       APP_MAIL_USERNAME_TEST = "${var.mail_username_test}"
     }
 
@@ -120,7 +120,7 @@ resource "google_cloudfunctions2_function" "function" {
     }
 
     all_traffic_on_latest_revision = true
-    service_account_email = google_service_account.cloud_function_service_account.email
+    service_account_email          = google_service_account.cloud_function_service_account.email
   }
 
   event_trigger {
@@ -150,9 +150,9 @@ resource "google_cloudfunctions2_function" "function" {
 }
 
 data "archive_file" "init" {
-  type        = "zip"
-  source_dir  = "${path.module}/../cloudFunction"
-  excludes    = ["${path.module}/main.tf",
+  type       = "zip"
+  source_dir = "${path.module}/../cloudFunction"
+  excludes = ["${path.module}/main.tf",
     "${path.module}/output.tf",
     "${path.module}/variables.tf"]
   output_path = var.cloud_function_source
@@ -166,7 +166,7 @@ resource "google_service_account" "cloud_function_service_account" {
 resource "google_project_iam_binding" "secret_accessor_binding" {
   project    = var.project_id
   role       = "roles/secretmanager.secretAccessor"
-  members    = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com",]
+  members    = ["serviceAccount:${var.account_id}@${var.project_id}.iam.gserviceaccount.com", ]
   depends_on = [google_service_account.cloud_function_service_account]
 }
 
