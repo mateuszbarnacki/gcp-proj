@@ -110,6 +110,10 @@ variable "mail_username_test" {
   description = "Email address which is used in cloud function test"
 }
 
+variable "db_name" {
+  type = string
+}
+
 variable "db_user" {
   type = string
 }

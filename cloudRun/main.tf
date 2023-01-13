@@ -55,8 +55,16 @@ resource "google_sql_database_instance" "db_instance" {
   deletion_protection = "false"
 }
 
+resource "google_sql_database" "db" {
+  name      = var.db_name
+  instance  = google_sql_database_instance.db_instance.name
+  charset   = "utf8"
+  collation = "utf8_general_ci"
+}
+
 resource "google_sql_user" "users" {
-  name = var.db_user
+  name     = var.db_user
   instance = google_sql_database_instance.db_instance.name
+  host     = "%"
   password = var.db_pass
 }
