@@ -17,18 +17,8 @@ public class TodoItemResourceImpl implements TodoItemResource {
     private final TodoItemRestService service;
 
     @Override
-    public ResponseEntity<List<TodoItemDto>> getUserTodoItems(@RequestBody QueryItemDto queryItemDto) {
-        return ResponseEntity.ok(service.getUserTodoItems(queryItemDto));
-    }
-
-    @Override
-    public ResponseEntity<List<TodoItemDto>> queryTodoItems(@RequestBody QueryItemDto queryItemDto) {
-        return ResponseEntity.ok(service.queryTodoItems(queryItemDto));
-    }
-
-    @Override
-    public ResponseEntity<List<TodoItemDto>> getItemsWhichShouldBeDone(@RequestBody QueryItemDto queryItemDto) {
-        return ResponseEntity.ok(service.getItemsWhichShouldBeDone(queryItemDto));
+    public ResponseEntity<List<TodoItemDto>> getUserTodoItems(String user) {
+        return ResponseEntity.ok(service.getUserTodoItems(user));
     }
 
     @Override

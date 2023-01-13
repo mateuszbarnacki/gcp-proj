@@ -16,27 +16,10 @@ public interface TodoItemService {
      * This method retrieves all items created by user with emailAddress specified in
      * QueryItemDto object.
      *
-     * @param queryItem Object which contains emailAddress of item author.
+     * @param user The first part of gmail email address.
      * @return Collection of items created by given user.
      */
-    Collection<TodoItemDto> getUserTodoItems(QueryItemDto queryItem);
-
-    /**
-     * This method retrieves items filtered by emailAddress, date and completed
-     * parameters specified in QueryItemDto object.
-     *
-     * @param queryItem Object which contains filter parameters.
-     * @return Collection of items filtered by given parameters.
-     */
-    Collection<TodoItemDto> queryTodoItems(QueryItemDto queryItem);
-
-    /**
-     * This method retrieves not completed items for given user specified by emailAddress.
-     *
-     * @param queryItem Object which contains emailAddress of item author.
-     * @return Collection of items created by given author which should be completed.
-     */
-    Collection<TodoItemDto> getItemsWhichShouldBeDone(QueryItemDto queryItem);
+    Collection<TodoItemDto> getUserTodoItems(String user);
 
     /**
      * This method removes all items created by user with given email address.

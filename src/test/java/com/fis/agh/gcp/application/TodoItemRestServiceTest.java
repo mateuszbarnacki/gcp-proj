@@ -3,7 +3,6 @@ package com.fis.agh.gcp.application;
 import com.fis.agh.gcp.domain.TodoItem;
 import com.fis.agh.gcp.domain.TodoItemRepository;
 import com.google.cloud.Timestamp;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,9 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 class TodoItemRestServiceTest {
@@ -28,44 +25,9 @@ class TodoItemRestServiceTest {
     @Mock
     private TodoItemRepository repository;
     @Mock
-    private TodoItemMapper mapper;
-    @Mock
     private ItemValidator validator;
     @InjectMocks
     private TodoItemRestService service;
-
-    @Test
-    void whenNullShouldThrowNullPointerException() {
-        Exception e = Assertions.assertThrows(NullPointerException.class, () -> service.queryTodoItems(null));
-        Assertions.assertNotNull(e);
-    }
-
-    @Test
-    void shouldReturnUserItem() {
-        QueryItemDto givenQueryItem = buildQueryItem();
-        Mockito.when(validator.validateQueryItem(any(QueryItemDto.class))).thenReturn(new ValidationResult(List.of()));
-        Mockito.when(repository.getUserTodoItems(EMAIL_ADDRESS, false)).thenReturn(List.of(buildTodoItem()));
-        Mockito.when(mapper.mapToDto(buildTodoItem())).thenReturn(buildTodoItemDto());
-
-        List<TodoItemDto> items = service.getUserTodoItems(givenQueryItem);
-
-        Assertions.assertFalse(items.isEmpty());
-        Mockito.verify(repository).getUserTodoItems(anyString(), anyBoolean());
-    }
-
-    @Test
-    void shouldReturnListOfTodoItemsWhichShouldBeDone() {
-        QueryItemDto givenQueryItemWithDate = buildQueryItemWithDate();
-        Mockito.when(validator.validateQueryItem(any(QueryItemDto.class))).thenReturn(new ValidationResult(List.of()));
-        Mockito.when(mapper.mapDateToGoogleTimestamp(DATE)).thenReturn(Timestamp.of(DATE));
-        Mockito.when(repository.getTodoItemsToBeDone(EMAIL_ADDRESS, Timestamp.of(DATE)))
-                .thenReturn(List.of(buildTodoItem()));
-        Mockito.when(mapper.mapToDto(buildTodoItem())).thenReturn(buildTodoItemDto());
-
-        service.getItemsWhichShouldBeDone(givenQueryItemWithDate);
-
-        Mockito.verify(repository).getTodoItemsToBeDone(anyString(), any(Timestamp.class));
-    }
 
     @Test
     void shouldDeleteAllUserTodoItems() {
@@ -91,27 +53,10 @@ class TodoItemRestServiceTest {
         return item;
     }
 
-    private TodoItemDto buildTodoItemDto() {
-        return TodoItemDto.builder()
-                .title("Test")
-                .content("Dummy content")
-                .address(EMAIL_ADDRESS)
-                .completed(false)
-                .date(DATE)
-                .build();
-    }
-
     private QueryItemDto buildQueryItem() {
         return QueryItemDto.builder()
                 .emailAddress(EMAIL_ADDRESS)
                 .completed(false)
-                .build();
-    }
-
-    private QueryItemDto buildQueryItemWithDate() {
-        return QueryItemDto.builder()
-                .emailAddress(EMAIL_ADDRESS)
-                .date(DATE)
                 .build();
     }
 }

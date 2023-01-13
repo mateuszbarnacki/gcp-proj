@@ -2,7 +2,6 @@ package com.fis.agh.gcp.infrastructure.repository;
 
 import com.fis.agh.gcp.domain.TodoItem;
 import com.fis.agh.gcp.domain.TodoItemRepository;
-import com.google.cloud.Timestamp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -22,16 +21,6 @@ public class TodoItemRepositoryImpl implements TodoItemRepository {
     @Override
     public List<TodoItem> getUserTodoItems(String emailAddress, boolean completed) {
         return jpaRepository.getUserTodoItems(emailAddress, completed);
-    }
-
-    @Override
-    public List<TodoItem> getTodoItemsByAddressAndDate(String emailAddress, Timestamp date) {
-        return jpaRepository.getTodoItemsByAddressAndDate(emailAddress, date);
-    }
-
-    @Override
-    public List<TodoItem> getTodoItemsToBeDone(String emailAddress, Timestamp date) {
-        return jpaRepository.getTodoItemsToBeDone(emailAddress, date);
     }
 
     @Override

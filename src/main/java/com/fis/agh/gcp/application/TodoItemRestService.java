@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TodoItemRestService implements TodoItemService {
     private final Logger logger = LoggerFactory.getLogger(TodoItemRestService.class);
+    private static final String GMAIL_DOMAIN = "@gmail.com";
     private final TodoItemRepository repository;
     private final TodoItemMapper mapper;
     private final ItemValidator validator;
@@ -40,39 +41,10 @@ public class TodoItemRestService implements TodoItemService {
         return saved;
     }
 
-    public List<TodoItemDto> getUserTodoItems(@NotNull QueryItemDto queryItem) {
-        ValidationResult validationResult = validator.validateQueryItem(queryItem);
-        if (validationResult.validate()) {
-            logger.error(validationResult.getMessages());
-        }
+    public List<TodoItemDto> getUserTodoItems(String user) {
+        String emailAccount = user + GMAIL_DOMAIN;
 
-        return repository.getUserTodoItems(queryItem.getEmailAddress(), queryItem.isCompleted())
-                .stream()
-                .map(mapper::mapToDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<TodoItemDto> queryTodoItems(@NotNull QueryItemDto queryItem) {
-        ValidationResult validationResult = validator.validateQueryItem(queryItem);
-        if (validationResult.validate()) {
-            logger.error(validationResult.getMessages());
-        }
-
-        return repository.getTodoItemsByAddressAndDate(queryItem.getEmailAddress(),
-                        mapper.mapDateToGoogleTimestamp(queryItem.getDate()))
-                .stream()
-                .map(mapper::mapToDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<TodoItemDto> getItemsWhichShouldBeDone(@NotNull QueryItemDto queryItem) {
-        ValidationResult validationResult = validator.validateQueryItem(queryItem);
-        if (validationResult.validate()) {
-            logger.error(validationResult.getMessages());
-        }
-
-        return repository.getTodoItemsToBeDone(queryItem.getEmailAddress(),
-                        mapper.mapDateToGoogleTimestamp(queryItem.getDate()))
+        return repository.getAllByEmailAddress(emailAccount)
                 .stream()
                 .map(mapper::mapToDto)
                 .collect(Collectors.toList());
