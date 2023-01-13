@@ -20,6 +20,8 @@ module "cloud_run" {
     image_name                 = var.image_name
     cloud_run_name             = var.cloud_run_name
     cloud_sql_db_instance_name = var.cloud_sql_db_instance_name
+    db_user                    = var.db_user
+    db_pass                    = var.db_pass
 }
 
 module "cloud_function" {
