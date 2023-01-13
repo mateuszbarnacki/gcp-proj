@@ -43,7 +43,6 @@ class TodoItemRestServiceTest {
     private TodoItem buildTodoItem() {
         TodoItem item = new TodoItem();
 
-        item.setId(1L);
         item.setTitle("Test");
         item.setContent("Dummy content");
         item.setEmailAddress(EMAIL_ADDRESS);

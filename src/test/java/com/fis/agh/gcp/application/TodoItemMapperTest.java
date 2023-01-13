@@ -59,7 +59,6 @@ class TodoItemMapperTest {
 
         TodoItem item = new TodoItem();
 
-        item.setId(1L);
         item.setTitle("Test2");
         item.setContent("Empty");
         item.setEmailAddress("test2@o2.pl");

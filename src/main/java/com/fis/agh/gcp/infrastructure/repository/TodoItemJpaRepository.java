@@ -11,19 +11,19 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TodoItemJpaRepository extends CrudRepository<TodoItem, Long> {
+public interface TodoItemJpaRepository extends CrudRepository<TodoItem, String> {
 
     List<TodoItem> getAllByEmailAddress(String address);
 
-    @Query("SELECT ti FROM todo_items ti WHERE ti.emailAddress = :address AND ti.completed = :completed")
+    @Query("SELECT ti FROM TodoItem ti WHERE ti.emailAddress = :address AND ti.completed = :completed")
     List<TodoItem> getUserTodoItems(@Param("address") String address,
                                     @Param("completed") boolean completed);
 
-    @Query("SELECT ti FROM todo_items ti WHERE ti.emailAddress = :address AND ti.date = :date")
+    @Query("SELECT ti FROM TodoItem ti WHERE ti.emailAddress = :address AND ti.date = :date")
     List<TodoItem> getTodoItemsByAddressAndDate(@Param("address") String address,
                                                 @Param("date") Timestamp date);
 
-    @Query("SELECT ti FROM todo_items ti WHERE ti.emailAddress = :address AND ti.date >= DATETIME(:date) AND ti.completed = FALSE")
+    @Query("SELECT ti FROM TodoItem ti WHERE ti.emailAddress = :address AND ti.date >= DATETIME(:date) AND ti.completed = FALSE")
     List<TodoItem> getTodoItemsToBeDone(@Param("address") String address,
                                         @Param("date") Timestamp date);
 }
