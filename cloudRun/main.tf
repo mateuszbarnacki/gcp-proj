@@ -64,6 +64,5 @@ resource "google_sql_database" "db" {
 resource "google_sql_user" "users" {
   name     = var.db_user
   instance = google_sql_database_instance.db_instance.name
-  host     = "%"
   password = var.db_pass
 }
