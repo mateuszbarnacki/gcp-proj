@@ -25,17 +25,6 @@ class ItemValidatorTest {
     }
 
     @Test
-    void shouldBeValidQueryItemDto() {
-        QueryItemDto queryItem = givenValidQueryItemDto();
-
-        ValidationResult validationResult = validator.validateQueryItem(queryItem);
-        String errorMessage = validationResult.getMessages();
-
-        Assertions.assertTrue(validationResult.validate());
-        Assertions.assertTrue(errorMessage.isBlank());
-    }
-
-    @Test
     void shouldReturnInvalidTitle() {
         TodoItemDto item = givenTodoItemDtoWithMissingTitle();
 
@@ -56,16 +45,6 @@ class ItemValidatorTest {
     }
 
     @Test
-    void shouldReturnInvalidEmail() {
-        QueryItemDto queryItem = givenQueryItemDtoWithInvalidEmailAddress();
-
-        ValidationResult validationResult = validator.validateQueryItem(queryItem);
-        String errorMessage = validationResult.getMessages();
-
-        Assertions.assertFalse(errorMessage.isBlank());
-    }
-
-    @Test
     void shouldDetectMoreInvalidFields() {
         TodoItemDto item = givenInvalidTodoItemDto();
 
@@ -82,13 +61,6 @@ class ItemValidatorTest {
                 .build();
     }
 
-    private QueryItemDto givenValidQueryItemDto() {
-        return QueryItemDto.builder()
-                .emailAddress("test_1@o2.com")
-                .date(new GregorianCalendar(2033, Calendar.MAY, 25).getTime())
-                .build();
-    }
-
     private TodoItemDto givenTodoItemDtoWithMissingTitle() {
         return TodoItemDto.builder()
                 .address("test@test.com")
@@ -100,13 +72,6 @@ class ItemValidatorTest {
         return TodoItemDto.builder()
                 .address("test@test.com")
                 .date(new GregorianCalendar(2013, Calendar.JANUARY, 13).getTime())
-                .build();
-    }
-
-    private QueryItemDto givenQueryItemDtoWithInvalidEmailAddress() {
-        return QueryItemDto.builder()
-                .emailAddress("test_1.@o2.com")
-                .date(new GregorianCalendar(2033, Calendar.MAY, 25).getTime())
                 .build();
     }
 

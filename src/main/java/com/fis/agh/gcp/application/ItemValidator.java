@@ -25,13 +25,6 @@ public class ItemValidator {
         return new ValidationResult(this.validationMessages);
     }
 
-    public ValidationResult validateQueryItem(QueryItemDto queryItem) {
-        this.validationMessages.clear();
-        validateEmailAddress(queryItem.getEmailAddress());
-        validateDate(queryItem.getDate());
-        return new ValidationResult(this.validationMessages);
-    }
-
     private void validateTitle(String title) {
         if (Objects.isNull(title) || title.isBlank()) {
             this.validationMessages.add("Title could not be blank!");

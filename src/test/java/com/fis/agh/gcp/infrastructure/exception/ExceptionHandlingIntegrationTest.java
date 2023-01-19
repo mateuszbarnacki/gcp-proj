@@ -26,20 +26,4 @@ class ExceptionHandlingIntegrationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Invalid dto!"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("BAD_REQUEST"));
     }
-
-    @Test
-    void shouldReturnNotFoundCausedByItemNotFoundException() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/error/item-not-found"))
-                .andExpect(MockMvcResultMatchers.status().isNotFound())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found!"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("NOT_FOUND"));
-    }
-
-    @Test
-    void shouldReturnInternalServerErrorCausedByItemNotSavedException() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/error/item-not-saved"))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not saved!"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("INTERNAL_SERVER_ERROR"));
-    }
 }

@@ -4,19 +4,9 @@ module "source_repo" {
     cloud_run_repo_name = var.cloud_run_repo_name
 }
 
-module "cloud_sql" {
-    source                     = "./cloudSQL"
-    cloud_sql_db_instance_name = var.cloud_sql_db_instance_name
-    db_name                    = var.db_name
-    db_user                    = var.db_user
-    db_pass                    = var.db_pass
-    region                     = var.region
-    zone                       = var.zone
-}
-
 module "cloud_build" {
     source              = "./cloudBuild"
-    depends_on          = [module.cloud_sql]
+    depends_on          = [module.source_repo]
     project_id          = var.project_id
     branch_name         = var.branch_name
     cloud_run_repo_name = var.cloud_run_repo_name

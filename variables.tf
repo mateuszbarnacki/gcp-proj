@@ -109,15 +109,3 @@ variable "mail_username_test" {
   type        = string
   description = "Email address which is used in cloud function test"
 }
-
-variable "db_name" {
-  type = string
-}
-
-variable "db_user" {
-  type = string
-}
-
-variable "db_pass" {
-  type = string
-}

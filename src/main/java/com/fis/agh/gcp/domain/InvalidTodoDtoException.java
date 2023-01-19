@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.domain.exception;
+package com.fis.agh.gcp.domain;
 
 public class InvalidTodoDtoException extends TodoItemException {
     public InvalidTodoDtoException(String message) {
