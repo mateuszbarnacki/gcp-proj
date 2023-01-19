@@ -10,8 +10,6 @@ resource "google_sql_database_instance" "db_instance" {
       zone = var.zone
     }
   }
-
-  deletion_protection = "false"
 }
 
 resource "google_sql_database" "db" {
