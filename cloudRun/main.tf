@@ -8,7 +8,8 @@ data "google_container_registry_image" "project-app" {
 }
 
 resource "google_cloud_run_service" "server" {
-  depends_on = [google_project_service.run]
+  depends_on = [google_project_service.run,
+                google_sql_user.users]
   name       = var.cloud_run_name
   location   = var.region
 
@@ -72,10 +73,12 @@ resource "google_sql_database" "db" {
   name      = var.db_name
   instance  = google_sql_database_instance.db_instance.name
   charset   = "utf8"
+  depends_on = [google_sql_database_instance.db_instance]
 }
 
 resource "google_sql_user" "users" {
   name     = var.db_user
   instance = google_sql_database_instance.db_instance.name
   password = var.db_pass
+  depends_on = [google_sql_database.db]
 }
