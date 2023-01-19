@@ -14,7 +14,7 @@ module "cloud_build" {
 
 module "cloud_run" {
     source                     = "./cloudRun"
-    depends_on                 = [module.cloud_function]
+    depends_on                 = [module.cloud_build]
     region                     = var.region
     zone                       = var.zone
     image_name                 = var.image_name
@@ -27,7 +27,7 @@ module "cloud_run" {
 
 module "cloud_function" {
     source                     = "./cloudFunction"
-    depends_on                 = [module.cloud_build]
+    depends_on                 = [module.cloud_run]
     project_id                 = var.project_id
     region                     = var.region
     pubsub_topic_name          = var.pubsub_topic_name
