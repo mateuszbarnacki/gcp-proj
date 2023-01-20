@@ -11,6 +11,8 @@ import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.TopicName;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 public class ConfirmationPublisher {
+    private final Logger logger = LoggerFactory.getLogger(ConfirmationPublisher.class);
     private static final String MESSAGE_CONTENT = "The new todo item \"%s\" is created. It's due date is set to %s.";
     private static final String DATE_FORMAT = "dd.MM.yyyy";
     private static final String PROJECT_ID = "primeval-legacy-375300";
@@ -57,15 +60,15 @@ public class ConfirmationPublisher {
                     public void onFailure(Throwable throwable) {
                         if (throwable instanceof ApiException) {
                             ApiException apiException = ((ApiException) throwable);
-                            System.out.println(apiException.getStatusCode().getCode());
-                            System.out.println(apiException.isRetryable());
+                            logger.error(String.valueOf(apiException.getStatusCode().getCode()));
+                            logger.error(String.valueOf(apiException.isRetryable()));
                         }
-                        System.out.println("Error publishing message");
+                        logger.error("Error publishing message");
                     }
 
                     @Override
                     public void onSuccess(String messageId) {
-                        System.out.println("Success" + " : " + messageId);
+                        logger.info(String.format("Success: %s", messageId));
                     }
                 },
                 MoreExecutors.directExecutor());
@@ -81,6 +84,5 @@ public class ConfirmationPublisher {
         return todo.getAddress() + ";" + todo.getTitle() + " event created;" +
                 String.format(MESSAGE_CONTENT, todo.getTitle(), formattedDate);
     }
-
 }
 

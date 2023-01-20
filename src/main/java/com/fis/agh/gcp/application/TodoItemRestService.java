@@ -27,7 +27,7 @@ public class TodoItemRestService implements TodoItemService {
         try {
             publisher.publish(todoItem);
         } catch (Exception e) {
-            logger.error("Could not public todoItem: " + e.getMessage());
+            logger.error("Could not publish todoItem: " + e.getMessage());
         }
 
         return CREATED;
