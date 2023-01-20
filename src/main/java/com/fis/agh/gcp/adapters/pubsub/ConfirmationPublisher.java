@@ -22,7 +22,7 @@ public class ConfirmationPublisher {
     private String topic;
 
     public void publish(TodoItemDto todo) {
-        this.pubSubTemplate.publish("confirmation-topic", buildPubSubMessage(todo));
+        this.pubSubTemplate.publish("projects/primeval-legacy-375300/topics/confirmation-topic", buildPubSubMessage(todo));
     }
 
     private PubsubMessage buildPubSubMessage(TodoItemDto todo) {
