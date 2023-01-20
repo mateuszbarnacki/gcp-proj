@@ -10,7 +10,7 @@ resource "google_project_service" "registry" {
 
 resource "google_cloudbuild_trigger" "cloud_build_trigger" {
   depends_on = [google_project_service.build,
-                google_service_account_iam_policy.build_sa]
+                google_project_iam_policy.build_sa]
   name       = var.cloud_run_repo_name
 
   trigger_template {
@@ -48,9 +48,9 @@ data "google_iam_policy" "build_policy" {
   }
 }
 
-resource "google_service_account_iam_policy" "build_sa" {
-  policy_data        = data.google_iam_policy.build_policy.policy_data
-  service_account_id = "serviceAccount:${var.project_number}@cloudbuild.gserviceaccount.com"
+resource "google_project_iam_policy" "build_sa" {
+  policy_data = data.google_iam_policy.build_policy.policy_data
+  project     = var.project_id
 }
 
 resource "null_resource" "empty_commit" {
