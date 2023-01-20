@@ -39,7 +39,7 @@ resource "google_cloud_run_service_iam_policy" "all_users_iam_policy" {
   policy_data = data.google_iam_policy.all_users_policy.policy_data
 }
 
-data "google_iam_policy" "service_account_policy" {
+/*data "google_iam_policy" "service_account_policy" {
   binding {
     members = ["allUsers"]
     role    = "roles/iam.serviceAccountUser"
@@ -50,4 +50,4 @@ resource "google_cloud_run_service_iam_policy" "service_account_iam_policy" {
   policy_data = data.google_iam_policy.service_account_policy.policy_data
   service     = google_cloud_run_service.server.name
   location    = google_cloud_run_service.server.location
-}
+}*/
