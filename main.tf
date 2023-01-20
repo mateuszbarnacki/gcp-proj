@@ -10,6 +10,7 @@ module "cloud_build" {
     project_id          = var.project_id
     branch_name         = var.branch_name
     cloud_run_repo_name = var.cloud_run_repo_name
+    project_number      = var.project_number
 }
 
 module "cloud_run" {

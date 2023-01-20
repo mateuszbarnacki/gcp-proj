@@ -1,4 +1,5 @@
 project_id                 = "smiling-topic-371018"
+project_number             = "100416269324"
 region                     = "europe-west3"
 zone                       = "europe-west3-b"
 pubsub_topic_name          = "confirmation-topic"
