@@ -9,8 +9,7 @@ resource "google_project_service" "registry" {
 }
 
 resource "google_cloudbuild_trigger" "cloud_build_trigger" {
-  depends_on = [google_project_service.build,
-                google_project_iam_policy.build_sa]
+  depends_on = [google_project_service.build]
   name       = var.cloud_run_repo_name
 
   trigger_template {
@@ -39,18 +38,6 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
       args = ["run", "deploy", "gcp-proj-app", "--image", "gcr.io/${var.project_id}/todolist-app", "--region", "europe-west3", "--platform", "managed", "--allow-unauthenticated"]
     }
   }
-}
-
-data "google_iam_policy" "build_policy" {
-  binding {
-    members = ["serviceAccount:${var.project_number}@cloudbuild.gserviceaccount.com"]
-    role    = "roles/run.admin"
-  }
-}
-
-resource "google_project_iam_policy" "build_sa" {
-  policy_data = data.google_iam_policy.build_policy.policy_data
-  project     = var.project_id
 }
 
 resource "null_resource" "empty_commit" {
