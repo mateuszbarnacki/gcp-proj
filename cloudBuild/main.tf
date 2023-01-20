@@ -43,14 +43,14 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
 
 data "google_iam_policy" "build_policy" {
   binding {
-    members = ["serviceAccount:${var.project_number}@cloudbuiild.gserviceaccount.com"]
+    members = ["serviceAccount:${var.project_number}@cloudbuild.gserviceaccount.com"]
     role    = "roles/run.admin"
   }
 }
 
 resource "google_service_account_iam_policy" "build_sa" {
   policy_data        = data.google_iam_policy.build_policy.policy_data
-  service_account_id = "serviceAccount:${var.project_number}@cloudbuiild.gserviceaccount.com"
+  service_account_id = "serviceAccount:${var.project_number}@cloudbuild.gserviceaccount.com"
 }
 
 resource "null_resource" "empty_commit" {
