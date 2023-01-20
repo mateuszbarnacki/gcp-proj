@@ -75,6 +75,12 @@ resource "google_cloudfunctions2_function" "function" {
     environment_variables = {
       APP_PROJECT_ID         = "${var.project_id}"
       APP_MAIL_USERNAME_TEST = "${var.mail_username_test}"
+      APP_MAIL_USERNAME      = "${var.mail_username}"
+      APP_MAIL_PASSWORD      = "${var.mail_password}"
+      APP_OAUTH_CLIENTID         = "${var.oauth_clientId}"
+      APP_OAUTH_CLIENT_SECRET    = "${var.oauth_client_secret}"
+      APP_OAUTH_REFRESH_TOKEN    = "${var.oauth_refresh_token}"
+      APP_OAUTH_ACCESS_TOKEN     = "${var.oauth_access_token}"
     }
 
     secret_environment_variables {
