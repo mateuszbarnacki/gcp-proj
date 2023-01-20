@@ -41,21 +41,28 @@ functions.cloudEvent('confirmationHandler', cloudEvent => {
 });
 
 function sendConfirmationEmail(emailData) {
+    const user = accessSecret(SECRET.MAIL_USERNAME);
+    const pass = accessSecret(SECRET.MAIL_PASSWORD);
+    const clientId = accessSecret(SECRET.OAUTH_CLIENTID);
+    const clientSecret = accessSecret(SECRET.OAUTH_CLIENT_SECRET);
+    const refreshToken = accessSecret(SECRET.OAUTH_REFRESH_TOKEN);
+    const accessToken = accessSecret(SECRET.OAUTH_ACCESS_TOKEN);
+
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
             type: 'OAuth2',
-            user: process.env.APP_MAIL_USERNAME,
-            pass: process.env.APP_MAIL_PASSWORD,
-            clientId: process.env.APP_OAUTH_CLIENTID,
-            clientSecret: process.env.APP_OAUTH_CLIENT_SECRET,
-            refreshToken: process.env.APP_OAUTH_REFRESH_TOKEN,
-            accessToken: process.env.APP_OAUTH_ACCESS_TOKEN
+            user: user,//process.env.APP_MAIL_USERNAME,
+            pass: pass,//process.env.APP_MAIL_PASSWORD,
+            clientId: clientId,//process.env.APP_OAUTH_CLIENTID,
+            clientSecret: clientSecret,//process.env.APP_OAUTH_CLIENT_SECRET,
+            refreshToken: refreshToken,//process.env.APP_OAUTH_REFRESH_TOKEN,
+            accessToken: accessToken//process.env.APP_OAUTH_ACCESS_TOKEN
         }
     });
 
     const emailOptions = {
-        from: process.env.APP_MAIL_USERNAME,
+        from: user,//process.env.APP_MAIL_USERNAME,
         to: emailData[0],
         subject: 'Creation of new ToDo item: ' + emailData[1],
         text: emailData[2]
