@@ -15,14 +15,12 @@ public class TodoItemDto {
     private final String content;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private final Date date;
-    private final boolean completed;
 
-    @ConstructorProperties({"address", "title", "content", "date", "completed"})
-    public TodoItemDto(String address, String title, String content, Date date, boolean completed) {
+    @ConstructorProperties({"address", "title", "content", "date"})
+    public TodoItemDto(String address, String title, String content, Date date) {
         this.address = address;
         this.title = title;
         this.content = content;
         this.date = date;
-        this.completed = completed;
     }
 }

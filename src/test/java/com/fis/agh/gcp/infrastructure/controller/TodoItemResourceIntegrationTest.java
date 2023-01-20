@@ -43,7 +43,6 @@ class TodoItemResourceIntegrationTest {
         Object jsonObject = new Object() {
             private final String emailAddress = "test4@gmail.pl";
             private final Date date = new GregorianCalendar(2023, Calendar.MARCH, 11).getTime();
-            private final boolean completed = false;
         };
 
         ObjectMapper objectMapper = new ObjectMapper();
