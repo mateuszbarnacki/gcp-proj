@@ -40,6 +40,18 @@ resource "google_cloudbuild_trigger" "cloud_build_trigger" {
   }
 }
 
+data "google_iam_policy" "all_users_policy" {
+  binding {
+    role    = "roles/run.admin"
+    members = ["allUsers"]
+  }
+}
+
+resource "google_cloud_run_service_iam_policy" "all_users_iam_policy" {
+  service     = google_cloudbuild_trigger.cloud_build_trigger.name
+  policy_data = data.google_iam_policy.all_users_policy.policy_data
+}
+
 resource "null_resource" "empty_commit" {
   depends_on = [google_cloudbuild_trigger.cloud_build_trigger]
   provisioner "local-exec" {
