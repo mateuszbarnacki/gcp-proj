@@ -185,6 +185,8 @@ resource "google_secret_manager_secret" "mail-username-secret" {
       }
     }
   }
+
+  depends_on = [google_project_service.secret_manager]
 }
 
 resource "google_secret_manager_secret" "mail-password-secret" {
@@ -197,6 +199,8 @@ resource "google_secret_manager_secret" "mail-password-secret" {
       }
     }
   }
+
+  depends_on = [google_project_service.secret_manager]
 }
 
 resource "google_secret_manager_secret" "oauth-client_id-secret" {
@@ -209,6 +213,8 @@ resource "google_secret_manager_secret" "oauth-client_id-secret" {
       }
     }
   }
+
+  depends_on = [google_project_service.secret_manager]
 }
 
 resource "google_secret_manager_secret" "oauth-client_secret-secret" {
@@ -221,6 +227,8 @@ resource "google_secret_manager_secret" "oauth-client_secret-secret" {
       }
     }
   }
+
+  depends_on = [google_project_service.secret_manager]
 }
 
 resource "google_secret_manager_secret" "oauth-refresh-token-secret" {
@@ -233,6 +241,8 @@ resource "google_secret_manager_secret" "oauth-refresh-token-secret" {
       }
     }
   }
+
+  depends_on = [google_project_service.secret_manager]
 }
 
 resource "google_secret_manager_secret" "oauth-access-token-secret" {
@@ -245,6 +255,8 @@ resource "google_secret_manager_secret" "oauth-access-token-secret" {
       }
     }
   }
+
+  depends_on = [google_project_service.secret_manager]
 }
 
 resource "google_secret_manager_secret_version" "mail-username-secret-ver" {
