@@ -1,6 +1,5 @@
-package com.fis.agh.gcp;
+package com.fis.agh.gcp.pubsub;
 
-import com.fis.agh.gcp.pubsub.MessageCreator;
 import com.fis.agh.gcp.service.TodoItemDto;
 import com.google.protobuf.ByteString;
 import org.junit.jupiter.api.Assertions;
