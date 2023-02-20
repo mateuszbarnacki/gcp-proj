@@ -49,18 +49,13 @@ class TodoItemResourceIntegrationTest {
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         String json = objectMapper.writeValueAsString(jsonObject);
 
-        Mockito.when(service.publishItem(any(TodoItemDto.class)))
-                .thenReturn("Created");
-
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/item")
                 .characterEncoding(StandardCharsets.UTF_8)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json);
 
         mvc.perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.valueOf("text/plain;charset=ISO-8859-1")))
-                .andExpect(MockMvcResultMatchers.content().string("Created"));
+                .andExpect(MockMvcResultMatchers.status().isCreated());
 
         Mockito.verify(service).publishItem(any(TodoItemDto.class));
     }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/item")
 @RequiredArgsConstructor
@@ -25,11 +24,11 @@ public class TodoItemResource {
     @ApiOperation(value = "Publish Pubsub message which triggers cloud function",
             notes = "Method consumes JSON which contains TodoItem data.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 201, message = "Item published successfully"),
             @ApiResponse(code = 400, message = "Invalid TodoItem object"),
             @ApiResponse(code = 500, message = "Could not publish item")})
     public ResponseEntity<String> publishTodoItem(@RequestBody TodoItemDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.publishItem(dto));
+        service.publishItem(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

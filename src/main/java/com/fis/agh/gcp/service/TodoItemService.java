@@ -3,10 +3,9 @@ package com.fis.agh.gcp.service;
 public interface TodoItemService {
 
     /**
-     * This method saves the given item in database.
+     * This method publish the given item on pubsub.
      *
-     * @param todoItem Item which is saved in database.
-     * @return Saved item.
+     * @param todoItem Item which is converted to message and published on pubsub.
      */
-    String publishItem(TodoItemDto todoItem);
+    void publishItem(TodoItemDto todoItem);
 }
