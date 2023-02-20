@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.application;
+package com.fis.agh.gcp.service;
 
 public interface TodoItemService {
 
@@ -8,5 +8,5 @@ public interface TodoItemService {
      * @param todoItem Item which is saved in database.
      * @return Saved item.
      */
-    String saveItem(TodoItemDto todoItem);
+    String publishItem(TodoItemDto todoItem);
 }

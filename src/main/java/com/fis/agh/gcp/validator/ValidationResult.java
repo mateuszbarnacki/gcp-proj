@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.application;
+package com.fis.agh.gcp.validator;
 
 import java.util.List;
 

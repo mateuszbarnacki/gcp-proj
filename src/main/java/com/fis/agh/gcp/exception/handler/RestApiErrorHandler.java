@@ -1,7 +1,8 @@
-package com.fis.agh.gcp.infrastructure.exception;
+package com.fis.agh.gcp.exception.handler;
 
-import com.fis.agh.gcp.domain.InvalidTodoDtoException;
-import com.fis.agh.gcp.domain.TodoItemException;
+import com.fis.agh.gcp.exception.InvalidTodoDtoException;
+import com.fis.agh.gcp.exception.RestError;
+import com.fis.agh.gcp.exception.TodoItemException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,7 +12,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class RestApiErrorHandler extends ResponseEntityExceptionHandler {
-
     @ExceptionHandler({InvalidTodoDtoException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<RestError> handleInvalidTodoDateException(InvalidTodoDtoException e) {

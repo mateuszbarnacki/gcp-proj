@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.application;
+package com.fis.agh.gcp.service;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;

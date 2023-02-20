@@ -1,5 +1,6 @@
-package com.fis.agh.gcp.application;
+package com.fis.agh.gcp.validator;
 
+import com.fis.agh.gcp.service.TodoItemDto;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 

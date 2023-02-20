@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.domain;
+package com.fis.agh.gcp.exception;
 
 public class TodoItemException extends RuntimeException {
     private final RestStatusCode statusCode;

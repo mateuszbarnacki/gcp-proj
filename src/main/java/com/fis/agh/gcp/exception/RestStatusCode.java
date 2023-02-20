@@ -1,4 +1,4 @@
-package com.fis.agh.gcp.domain;
+package com.fis.agh.gcp.exception;
 
 public enum RestStatusCode {
     BAD_REQUEST(400),

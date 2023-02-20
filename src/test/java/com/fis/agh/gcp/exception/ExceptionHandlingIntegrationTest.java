@@ -1,5 +1,6 @@
-package com.fis.agh.gcp.infrastructure.exception;
+package com.fis.agh.gcp.exception;
 
+import com.fis.agh.gcp.exception.handler.RestApiErrorHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

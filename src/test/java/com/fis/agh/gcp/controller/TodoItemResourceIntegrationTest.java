@@ -1,10 +1,10 @@
-package com.fis.agh.gcp.infrastructure.controller;
+package com.fis.agh.gcp.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fis.agh.gcp.application.TodoItemDto;
-import com.fis.agh.gcp.application.TodoItemRestService;
+import com.fis.agh.gcp.service.TodoItemDto;
+import com.fis.agh.gcp.service.TodoItemRestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +35,7 @@ class TodoItemResourceIntegrationTest {
 
     @BeforeEach
     public void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(new TodoItemResourceImpl(service)).build();
+        mvc = MockMvcBuilders.standaloneSetup(new TodoItemResource(service)).build();
     }
 
     @Test
@@ -49,7 +49,7 @@ class TodoItemResourceIntegrationTest {
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         String json = objectMapper.writeValueAsString(jsonObject);
 
-        Mockito.when(service.saveItem(any(TodoItemDto.class)))
+        Mockito.when(service.publishItem(any(TodoItemDto.class)))
                 .thenReturn("Created");
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/item")
@@ -62,6 +62,6 @@ class TodoItemResourceIntegrationTest {
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.valueOf("text/plain;charset=ISO-8859-1")))
                 .andExpect(MockMvcResultMatchers.content().string("Created"));
 
-        Mockito.verify(service).saveItem(any(TodoItemDto.class));
+        Mockito.verify(service).publishItem(any(TodoItemDto.class));
     }
 }

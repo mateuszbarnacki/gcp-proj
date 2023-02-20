@@ -1,6 +1,5 @@
-package com.fis.agh.gcp.infrastructure.exception;
+package com.fis.agh.gcp.exception;
 
-import com.fis.agh.gcp.domain.RestStatusCode;
 import lombok.Builder;
 import lombok.Getter;
 
