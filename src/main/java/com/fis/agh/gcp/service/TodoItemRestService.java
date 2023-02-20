@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Service
 @RequiredArgsConstructor
 public class TodoItemRestService implements TodoItemService {
-    private static final String CREATED = "Created";
+    private static final String PUBLISHED = "Published";
     private final Logger logger = LoggerFactory.getLogger(TodoItemRestService.class);
     private final ItemValidator itemValidator;
     private final ConfirmationPublisher confirmationPublisher;
@@ -25,7 +25,7 @@ public class TodoItemRestService implements TodoItemService {
             logValidationError(validationResult);
         }
         confirmationPublisher.publish(todoItem);
-        return CREATED;
+        return PUBLISHED;
     }
 
     private void logValidationError(ValidationResult validationResult) {

@@ -39,7 +39,7 @@ class TodoItemResourceIntegrationTest {
     }
 
     @Test
-    void shouldCreateTodoItem() throws Exception {
+    void shouldPublishTodoItem() throws Exception {
         Object jsonObject = new Object() {
             private final String emailAddress = "test4@gmail.pl";
             private final Date date = new GregorianCalendar(2023, Calendar.MARCH, 11).getTime();
