@@ -23,9 +23,9 @@ public class TodoItemRestService implements TodoItemService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TodoItemRestService.class);
     private final ItemValidator itemValidator;
     private final ConfirmationPublisher confirmationPublisher;
-    @Value("{spring.cloud.gcp.project-id}")
+    @Value("${spring.cloud.gcp.project-id}")
     private String projectId;
-    @Value("{gcp.topic-id}")
+    @Value("${gcp.topic-id}")
     private String topicId;
 
     @Override
