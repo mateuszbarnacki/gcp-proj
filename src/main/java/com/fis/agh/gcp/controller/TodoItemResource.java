@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/items")
 @RequiredArgsConstructor
 public class TodoItemResource {
     private final TodoItemService service;

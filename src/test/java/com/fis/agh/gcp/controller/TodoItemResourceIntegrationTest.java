@@ -49,7 +49,7 @@ class TodoItemResourceIntegrationTest {
         objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         String json = objectMapper.writeValueAsString(jsonObject);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/item")
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/items")
                 .characterEncoding(StandardCharsets.UTF_8)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json);
